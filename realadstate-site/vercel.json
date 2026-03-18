@@ -1,26 +1,25 @@
+
+Copy
+
 {
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/makelaars/diensten",   "destination": "/pages/makelaardiensten.html" },
-    { "source": "/vastgoedontwikkelaars","destination": "/pages/vastgoedontwikkelaars.html" },
-    { "source": "/cases",                "destination": "/pages/cases.html" },
-    { "source": "/cases/:slug",          "destination": "/pages/case-template.html" }
-  ],
-  "headers": [
     {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options",        "value": "SAMEORIGIN" },
-        { "key": "Referrer-Policy",        "value": "strict-origin-when-cross-origin" }
-      ]
+      "source": "/makelaars/diensten",
+      "destination": "/pages/makelaardiensten.html"
     },
     {
-      "source": "/assets/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
+      "source": "/vastgoedontwikkelaars",
+      "destination": "/pages/vastgoedontwikkelaars.html"
+    },
+    {
+      "source": "/cases",
+      "destination": "/pages/cases.html"
+    },
+    {
+      "source": "/cases/:slug",
+      "destination": "/pages/case-template.html"
     }
   ]
 }
