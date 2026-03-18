@@ -1,0 +1,435 @@
+<!--
+╔══════════════════════════════════════════════════════════════╗
+  REAL ADSTATE — WEBFLOW IMPORT: CASES
+  URL: realadstate.nl/cases
+╠══════════════════════════════════════════════════════════════╣
+  STAPPEN:
+  1. Open Webflow → jouw project → Pages → New Page
+  2. Stel slug in op: /cases
+  3. Open de pagina → Designer view
+  4. Voeg per sectie een "HTML Embed" component toe
+  5. Kopieer elke sectie uit dit bestand in het juiste embed-blok
+
+  SECTIES IN DIT BESTAND (zie markers in de HTML):
+  - Cases grid → ideaal als Webflow CMS Collection
+  - Filterbar JavaScript: plak in Site Settings → Footer Code
+  - Elke case-kaart → CMS item met velden: titel, categorie, locatie, stats, kanalen
+  - Featured case (span 2 kolommen) → CMS conditie op "featured" veld
+
+  GLOBAL CSS:
+  Zorg dat webflow-global.css al is toegevoegd via:
+  Site Settings → Custom Code → <head> sectie
+╚══════════════════════════════════════════════════════════════╝
+-->
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cases — Real Adstate</title>
+<!--
+  WEBFLOW: Voeg webflow-global.css toe via Site Settings → Custom Code
+  De <style> hieronder bevat pagina-specifieke stijlen.
+  In Webflow plak je deze in: Page Settings → Custom Code → <head>
+-->
+<style>
+:root {
+  --navy:  #0F2043;
+  --green: #69C28E;
+  --green2:#4aab76;
+  --gd:    rgba(105,194,142,0.10);
+  --gb:    rgba(105,194,142,0.25);
+  --bg:    #F7F8FC;
+  --white: #FFFFFF;
+  --text:  #1A2B47;
+  --muted: #6B7A99;
+  --border:#E2E8F0;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+
+/* ── NAV ── */
+nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 60px;display:flex;align-items:center;height:68px;}
+.nav-logo{height:22px;margin-right:48px;}
+.nav-links{display:flex;}
+.nav-link{padding:0 18px;height:68px;display:flex;align-items:center;font-size:0.82rem;font-weight:500;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;transition:all .18s;white-space:nowrap;}
+.nav-link:hover{color:var(--navy);}
+.nav-link.active{color:var(--navy);border-bottom-color:var(--green);font-weight:600;}
+.nav-cta{margin-left:auto;background:var(--navy);color:var(--white);padding:9px 22px;border-radius:5px;font-size:0.8rem;font-weight:700;text-decoration:none;}
+
+/* ── HERO ── */
+.hero{background:var(--navy);padding:72px 60px 64px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 50%, rgba(105,194,142,0.08) 0%, transparent 60%);}
+.hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.013) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.013) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-inner{position:relative;z-index:2;max-width:640px;}
+.mono-tag{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:16px;}
+.mono-tag::before{content:'';width:20px;height:1px;background:var(--green);}
+h1{font-family:'DM Serif Display',serif;font-size:2.8rem;color:#fff;line-height:1.1;margin-bottom:14px;}
+h1 em{font-style:italic;color:var(--green);}
+.hero-sub{font-size:0.95rem;color:rgba(255,255,255,0.52);line-height:1.75;max-width:520px;margin-bottom:36px;}
+.hero-stats{display:flex;gap:40px;}
+.hs-item{}
+.hs-val{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--green);line-height:1;}
+.hs-lbl{font-size:0.68rem;color:rgba(255,255,255,0.38);margin-top:3px;}
+
+/* ── FILTER BAR ── */
+.filter-bar{background:var(--white);border-bottom:1px solid var(--border);padding:16px 60px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.filter-label{font-family:'Space Mono',monospace;font-size:0.52rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-right:6px;}
+.filter-btn{font-size:0.75rem;font-weight:600;padding:6px 16px;border-radius:20px;border:1.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all .18s;font-family:inherit;}
+.filter-btn:hover{border-color:var(--navy);color:var(--navy);}
+.filter-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+/* ── CASES GRID ── */
+.cases-section{padding:60px 60px 80px;}
+.cases-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+
+/* Case card */
+.case-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;overflow:hidden;transition:all .22s;text-decoration:none;display:block;}
+.case-card:hover{box-shadow:0 12px 40px rgba(15,32,67,0.10);transform:translateY(-4px);border-color:var(--green);}
+.case-card-img{aspect-ratio:16/9;background:var(--navy);position:relative;overflow:hidden;}
+.case-card-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+.case-card:hover .case-card-img img{transform:scale(1.04);}
+.case-card-img-placeholder{width:100%;height:100%;display:flex;align-items:flex-end;padding:16px;background:linear-gradient(135deg,var(--navy) 0%,#1a3a5c 100%);position:relative;}
+.case-card-img-placeholder::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,32,67,0.6) 0%,transparent 60%);}
+.cip-tag{position:relative;z-index:2;font-family:'Space Mono',monospace;font-size:0.46rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);}
+/* Category color accent */
+.case-card-img::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;z-index:3;}
+.cat-makelaars .case-card-img::before{background:var(--green);}
+.cat-ontwikkelaar .case-card-img::before{background:#5b9cf6;}
+.cat-commercial .case-card-img::before{background:var(--amber, #F5A623);}
+
+.case-card-body{padding:20px 20px 22px;}
+.case-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.case-cat{font-size:0.62rem;font-weight:700;padding:3px 10px;border-radius:3px;text-transform:uppercase;letter-spacing:0.06em;}
+.cat-makelaars .case-cat{background:var(--gd);color:var(--green2);}
+.cat-ontwikkelaar .case-cat{background:rgba(91,156,246,0.1);color:#3b7dd8;}
+.cat-commercial .case-cat{background:rgba(245,166,35,0.1);color:#c47d00;}
+.case-location{font-size:0.68rem;color:var(--muted);}
+.case-title{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);line-height:1.25;margin-bottom:8px;}
+.case-tagline{font-size:0.76rem;color:var(--muted);line-height:1.6;margin-bottom:16px;}
+.case-stats-row{display:flex;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.csr-item{flex:1;padding:9px 10px;border-right:1px solid var(--border);text-align:center;}
+.csr-item:last-child{border-right:none;}
+.csr-val{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);line-height:1;}
+.csr-lbl{font-size:0.56rem;color:var(--muted);margin-top:2px;line-height:1.3;}
+.case-channels{display:flex;gap:5px;flex-wrap:wrap;margin-top:12px;}
+.cch{font-size:0.58rem;font-weight:600;background:rgba(15,32,67,0.05);border:1px solid var(--border);color:var(--navy);padding:3px 9px;border-radius:3px;}
+.case-read-more{display:flex;align-items:center;gap:5px;font-size:0.75rem;font-weight:700;color:var(--green2);margin-top:14px;padding-top:14px;border-top:1px solid var(--border);}
+.case-read-more::after{content:'→';}
+
+/* Featured case — spans 2 columns */
+.case-card.featured{grid-column:span 2;}
+.case-card.featured .case-card-img{aspect-ratio:2.4/1;}
+.case-card.featured .case-title{font-size:1.3rem;}
+
+/* ── CIJFERS BANNER ── */
+.cijfers-banner{background:var(--navy);margin:0 60px 60px;border-radius:12px;padding:40px 48px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;overflow:hidden;}
+.cijfers-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%, rgba(105,194,142,0.08) 0%, transparent 60%);}
+.cb-item{position:relative;z-index:2;padding:0 32px;border-right:1px solid rgba(255,255,255,0.08);text-align:center;}
+.cb-item:first-child{padding-left:0;}
+.cb-item:last-child{border-right:none;}
+.cb-val{font-family:'DM Serif Display',serif;font-size:2.2rem;color:var(--green);line-height:1;margin-bottom:6px;}
+.cb-lbl{font-size:0.72rem;color:rgba(255,255,255,0.42);line-height:1.4;}
+
+/* ── CTA ── */
+.cta-section{background:var(--white);border-top:1px solid var(--border);padding:64px 60px;display:grid;grid-template-columns:1fr auto;gap:60px;align-items:center;}
+.cta-title{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--navy);line-height:1.15;margin-bottom:10px;}
+.cta-sub{font-size:0.88rem;color:var(--muted);line-height:1.7;max-width:480px;}
+.cta-buttons{display:flex;gap:12px;flex-direction:column;align-items:flex-end;}
+.btn-primary{background:var(--green);color:var(--navy);padding:13px 28px;border-radius:5px;font-size:0.88rem;font-weight:800;text-decoration:none;white-space:nowrap;}
+.btn-secondary{border:1.5px solid var(--border);color:var(--navy);padding:12px 24px;border-radius:5px;font-size:0.82rem;font-weight:600;text-decoration:none;white-space:nowrap;}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav>
+  <img class="nav-logo" src="https://realadstate.nl/wp-content/uploads/2025/09/RealAdState_Logo_horizontaal_fullcolor.svg"
+    onerror="this.outerHTML='<span style=&quot;font-weight:800;font-size:1rem;color:var(--navy);&quot;>Real<span style=&quot;color:var(--green);&quot;>Adstate</span></span>'" alt="Real Adstate">
+  <div class="nav-links">
+    <a class="nav-link" href="#">Home</a>
+    <a class="nav-link" href="#">Voor Makelaars</a>
+    <a class="nav-link" href="#">Voor Vastgoedontwikkelaars</a>
+    <a class="nav-link active" href="#">Cases</a>
+  </div>
+  <a class="nav-cta" href="#">Neem contact op</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="mono-tag">Resultaten die spreken</div>
+    <h1>Geen mooie praatjes.<br><em>Alleen cijfers.</em></h1>
+    <p class="hero-sub">Van villa's tot logistiek vastgoed — elke case is gebouwd op meetbare resultaten. Meer bezichtigingen, meer leads, snellere verkoop.</p>
+    <div class="hero-stats">
+      <div class="hs-item">
+        <div class="hs-val">7</div>
+        <div class="hs-lbl">afgeronde cases</div>
+      </div>
+      <div class="hs-item">
+        <div class="hs-val">250%</div>
+        <div class="hs-lbl">gem. stijging aanvragen</div>
+      </div>
+      <div class="hs-item">
+        <div class="hs-val">48u</div>
+        <div class="hs-lbl">gemiddeld live</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <span class="filter-label">Filter:</span>
+  <button class="filter-btn active" onclick="filterCases('all', this)">Alle cases</button>
+  <button class="filter-btn" onclick="filterCases('makelaars', this)">Makelaars</button>
+  <button class="filter-btn" onclick="filterCases('ontwikkelaar', this)">Vastgoedontwikkelaar</button>
+  <button class="filter-btn" onclick="filterCases('commercial', this)">Commercieel vastgoed</button>
+</div>
+
+<!-- CIJFERS -->
+<div class="cijfers-banner">
+  <div class="cb-item">
+    <div class="cb-val">70.000+</div>
+    <div class="cb-lbl">unieke weergaven<br>één campagne (Arnhem)</div>
+  </div>
+  <div class="cb-item">
+    <div class="cb-val">500%</div>
+    <div class="cb-lbl">stijging downloads<br>projectdocumentatie</div>
+  </div>
+  <div class="cb-item">
+    <div class="cb-val">1,5 wk</div>
+    <div class="cb-lbl">villa verkocht<br>via Meta Ads</div>
+  </div>
+  <div class="cb-item">
+    <div class="cb-val">+30%</div>
+    <div class="cb-lbl">maandelijkse websitegroei<br>DHG logistiek</div>
+  </div>
+</div>
+
+<!-- CASES GRID -->
+<section class="cases-section">
+  <div class="cases-grid" id="casesGrid">
+
+    <!--
+    ════════════════════════════════════════════════════════
+    CASE KAART — kopieer dit blok voor elke nieuwe case
+    Vul in:  data-cat="makelaars" | "ontwikkelaar" | "commercial"
+    ════════════════════════════════════════════════════════
+    -->
+
+    <!-- CASE 1 — Waddixveen (featured) -->
+    <a class="case-card featured cat-ontwikkelaar" href="case-template.html" data-cat="ontwikkelaar">
+      <div class="case-card-img">
+        <img src="https://realadstate.nl/wp-content/uploads/2025/11/Kopie-van-Kopie-van-Zonder-titel.png"
+             alt="Business units Waddixveen"
+             onerror="this.parentElement.innerHTML='<div class=\'case-card-img-placeholder\'><span class=\'cip-tag\'>Business units · Waddixveen</span></div>'">
+      </div>
+      <div class="case-card-body">
+        <div class="case-meta">
+          <span class="case-cat">Vastgoedontwikkelaar</span>
+          <span class="case-location">📍 Waddixveen</span>
+        </div>
+        <div class="case-title">28 moderne businessunits verkocht via Meta Ads</div>
+        <div class="case-tagline">Gerichte campagne in de verkoopfase: 50.000+ bereik, 500% meer downloads van projectdocumentatie.</div>
+        <div class="case-stats-row">
+          <div class="csr-item"><div class="csr-val">50K+</div><div class="csr-lbl">bereik</div></div>
+          <div class="csr-item"><div class="csr-val">500%</div><div class="csr-lbl">meer downloads</div></div>
+          <div class="csr-item"><div class="csr-val">200%</div><div class="csr-lbl">meer aanvragen</div></div>
+        </div>
+        <div class="case-channels">
+          <span class="cch">Meta Ads</span><span class="cch">Facebook</span><span class="cch">Instagram</span>
+        </div>
+        <div class="case-read-more">Lees de volledige case</div>
+      </div>
+    </a>
+
+    <!-- CASE 2 — Arnhem nieuwbouw -->
+    <a class="case-card cat-ontwikkelaar" href="#" data-cat="ontwikkelaar">
+      <div class="case-card-img">
+        <img src="https://realadstate.nl/wp-content/uploads/2025/10/Kopie-van-Kopie-van-Zonder-titel.png"
+             alt="Nieuwbouw Arnhem"
+             onerror="this.parentElement.innerHTML='<div class=\'case-card-img-placeholder\'><span class=\'cip-tag\'>Nieuwbouw · Arnhem</span></div>'">
+      </div>
+      <div class="case-card-body">
+        <div class="case-meta">
+          <span class="case-cat">Vastgoedontwikkelaar</span>
+          <span class="case-location">📍 Arnhem</span>
+        </div>
+        <div class="case-title">28 luxe appartementen — 250% meer aanvragen</div>
+        <div class="case-tagline">Full-funnel campagne via Meta én Google. Van visuele sfeer tot brochure-downloads en bezichtigingen.</div>
+        <div class="case-stats-row">
+          <div class="csr-item"><div class="csr-val">70K+</div><div class="csr-lbl">weergaven</div></div>
+          <div class="csr-item"><div class="csr-val">500</div><div class="csr-lbl">downloads</div></div>
+          <div class="csr-item"><div class="csr-val">250%</div><div class="csr-lbl">meer aanvragen</div></div>
+        </div>
+        <div class="case-channels">
+          <span class="cch">Meta Ads</span><span class="cch">Google Ads</span><span class="cch">Retargeting</span>
+        </div>
+        <div class="case-read-more">Lees de volledige case</div>
+      </div>
+    </a>
+
+    <!-- CASE 3 — Villa Zwanenburg -->
+    <a class="case-card cat-makelaars" href="#" data-cat="makelaars">
+      <div class="case-card-img">
+        <img src="https://realadstate.nl/wp-content/uploads/2025/10/Kopie-van-Zonder-titel-4.png"
+             alt="Villa Zwanenburg"
+             onerror="this.parentElement.innerHTML='<div class=\'case-card-img-placeholder\'><span class=\'cip-tag\'>Woning · Zwanenburg</span></div>'">
+      </div>
+      <div class="case-card-body">
+        <div class="case-meta">
+          <span class="case-cat">Makelaar</span>
+          <span class="case-location">📍 Zwanenburg</span>
+        </div>
+        <div class="case-title">Villa €1.095.000 verkocht binnen 1,5 week</div>
+        <div class="case-tagline">Woning eerder van de markt gehaald. Tweede kans via Meta Ads: binnen anderhalve week opnieuw verkocht.</div>
+        <div class="case-stats-row">
+          <div class="csr-item"><div class="csr-val">16K+</div><div class="csr-lbl">weergaven</div></div>
+          <div class="csr-item"><div class="csr-val">1.500</div><div class="csr-lbl">bezoekers</div></div>
+          <div class="csr-item"><div class="csr-val">1,5 wk</div><div class="csr-lbl">verkocht</div></div>
+        </div>
+        <div class="case-channels">
+          <span class="cch">Meta Ads</span>
+        </div>
+        <div class="case-read-more">Lees de volledige case</div>
+      </div>
+    </a>
+
+    <!-- CASE 4 — DHG logistiek -->
+    <a class="case-card cat-commercial" href="#" data-cat="commercial">
+      <div class="case-card-img">
+        <img src="https://realadstate.nl/wp-content/uploads/2025/10/Kopie-van-Kopie-van-Kopie-van-Zonder-titel.png"
+             alt="DHG logistiek"
+             onerror="this.parentElement.innerHTML='<div class=\'case-card-img-placeholder\'><span class=\'cip-tag\'>Logistiek vastgoed · DHG</span></div>'">
+      </div>
+      <div class="case-card-body">
+        <div class="case-meta">
+          <span class="case-cat">Commercieel vastgoed</span>
+          <span class="case-location">📍 Landelijk</span>
+        </div>
+        <div class="case-title">DHG — zichtbaarheid voor logistiek vastgoed</div>
+        <div class="case-tagline">Volledige Google Ads-strategie: Search, Display én YouTube. Sterke merkpositie in concurrerende markt.</div>
+        <div class="case-stats-row">
+          <div class="csr-item"><div class="csr-val">+30%</div><div class="csr-lbl">websitegroei/mnd</div></div>
+          <div class="csr-item"><div class="csr-val">3</div><div class="csr-lbl">kanalen</div></div>
+          <div class="csr-item"><div class="csr-val">↑</div><div class="csr-lbl">merkpositie</div></div>
+        </div>
+        <div class="case-channels">
+          <span class="cch">Google Search</span><span class="cch">Display</span><span class="cch">YouTube</span>
+        </div>
+        <div class="case-read-more">Lees de volledige case</div>
+      </div>
+    </a>
+
+    <!-- CASE 5 — Zuideinde Amsterdam-Noord -->
+    <a class="case-card cat-ontwikkelaar" href="#" data-cat="ontwikkelaar">
+      <div class="case-card-img">
+        <img src="https://realadstate.nl/wp-content/uploads/2025/10/Kopie-van-Kopie-van-Zonder-titel-1.png"
+             alt="Zuideinde Amsterdam-Noord"
+             onerror="this.parentElement.innerHTML='<div class=\'case-card-img-placeholder\'><span class=\'cip-tag\'>Nieuwbouw · Amsterdam-Noord</span></div>'">
+      </div>
+      <div class="case-card-body">
+        <div class="case-meta">
+          <span class="case-cat">Vastgoedontwikkelaar</span>
+          <span class="case-location">📍 Amsterdam-Noord</span>
+        </div>
+        <div class="case-title">Zuideinde — 7 nieuwbouwwoningen snel verkocht</div>
+        <div class="case-tagline">Kleinschalig project, grote impact. Hypergerichte targeting op gezinnen in Amsterdam-Noord.</div>
+        <div class="case-stats-row">
+          <div class="csr-item"><div class="csr-val">7/7</div><div class="csr-lbl">units verkocht</div></div>
+          <div class="csr-item"><div class="csr-val">Snel</div><div class="csr-lbl">doorlooptijd</div></div>
+          <div class="csr-item"><div class="csr-val">Lokaal</div><div class="csr-lbl">gericht</div></div>
+        </div>
+        <div class="case-channels">
+          <span class="cch">Meta Ads</span><span class="cch">Instagram</span>
+        </div>
+        <div class="case-read-more">Lees de volledige case</div>
+      </div>
+    </a>
+
+    <!-- CASE 6 — Hemkade evenementenlocatie -->
+    <a class="case-card cat-commercial" href="#" data-cat="commercial">
+      <div class="case-card-img">
+        <img src="https://realadstate.nl/wp-content/uploads/2025/10/Kopie-van-Kopie-van-Zonder-titel-2.png"
+             alt="Hemkade evenementenlocatie"
+             onerror="this.parentElement.innerHTML='<div class=\'case-card-img-placeholder\'><span class=\'cip-tag\'>Evenementen · Hemkade</span></div>'">
+      </div>
+      <div class="case-card-body">
+        <div class="case-meta">
+          <span class="case-cat">Commercieel vastgoed</span>
+          <span class="case-location">📍 Zaandam</span>
+        </div>
+        <div class="case-title">Een boost voor bekende evenementenlocatie</div>
+        <div class="case-tagline">Meer zichtbaarheid en boekingen voor een bekende evenementenlocatie via gerichte campagnes.</div>
+        <div class="case-stats-row">
+          <div class="csr-item"><div class="csr-val">↑</div><div class="csr-lbl">boekingen</div></div>
+          <div class="csr-item"><div class="csr-val">↑</div><div class="csr-lbl">bereik</div></div>
+          <div class="csr-item"><div class="csr-val">↑</div><div class="csr-lbl">aanvragen</div></div>
+        </div>
+        <div class="case-channels">
+          <span class="cch">Meta Ads</span><span class="cch">Google</span>
+        </div>
+        <div class="case-read-more">Lees de volledige case</div>
+      </div>
+    </a>
+
+    <!-- CASE 7 — The Hoff Zuidas -->
+    <a class="case-card cat-commercial" href="#" data-cat="commercial">
+      <div class="case-card-img">
+        <img src="https://realadstate.nl/wp-content/uploads/2025/10/Ontwerp-zonder-titel-9.png"
+             alt="The Hoff Zuidas"
+             onerror="this.parentElement.innerHTML='<div class=\'case-card-img-placeholder\'><span class=\'cip-tag\'>Kantoren · Amsterdam Zuidas</span></div>'">
+      </div>
+      <div class="case-card-body">
+        <div class="case-meta">
+          <span class="case-cat">Commercieel vastgoed</span>
+          <span class="case-location">📍 Amsterdam Zuidas</span>
+        </div>
+        <div class="case-title">The Hoff — premium kantoren op de Zuidas verhuurd</div>
+        <div class="case-tagline">LinkedIn-targeting op directeuren en ondernemers gecombineerd met Google Search op hoge aankoopintentie.</div>
+        <div class="case-stats-row">
+          <div class="csr-item"><div class="csr-val">B2B</div><div class="csr-lbl">doelgroep</div></div>
+          <div class="csr-item"><div class="csr-val">Zuidas</div><div class="csr-lbl">premium markt</div></div>
+          <div class="csr-item"><div class="csr-val">↑</div><div class="csr-lbl">bezettingsgraad</div></div>
+        </div>
+        <div class="case-channels">
+          <span class="cch">LinkedIn</span><span class="cch">Google</span><span class="cch">Retargeting</span>
+        </div>
+        <div class="case-read-more">Lees de volledige case</div>
+      </div>
+    </a>
+
+  </div><!-- /cases-grid -->
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div>
+    <div class="case-title" style="font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--navy);margin-bottom:10px;">Jouw project als volgende case?</div>
+    <p class="cta-sub" style="font-size:0.88rem;color:var(--muted);line-height:1.7;max-width:480px;">Plan een vrijblijvend gesprek van 20–30 minuten. Wij kijken samen naar jouw project, doelgroep en budget — en geven een concreet advies.</p>
+  </div>
+  <div class="cta-buttons">
+    <a href="#" class="btn-primary">Plan een gesprek →</a>
+    <a href="#" class="btn-secondary">Bekijk onze diensten</a>
+  </div>
+</div>
+
+<script>
+function filterCases(cat, btn) {
+  // Update active button
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Show/hide cards
+  document.querySelectorAll('.case-card').forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>

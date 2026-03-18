@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real Adstate — Meer bereik voor jouw vastgoed via Meta Ads</title>
+<meta name="description" content="Real Adstate adverteert jouw woning of vastgoedproject op Facebook en Instagram. Meer bezichtigingen, meer leads, snellere verkoop.">
+<link rel="stylesheet" href="/assets/css/global.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── NAV ── */
+nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 60px;display:flex;align-items:center;height:68px;}
+.nav-logo{height:22px;margin-right:48px;}
+.nav-links{display:flex;}
+.nav-link{padding:0 18px;height:68px;display:flex;align-items:center;font-size:0.82rem;font-weight:500;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;transition:all .18s;white-space:nowrap;}
+.nav-link:hover{color:var(--navy);}
+.nav-link.active{color:var(--navy);border-bottom-color:var(--green);font-weight:600;}
+.nav-cta{margin-left:auto;background:var(--navy);color:var(--white);padding:9px 22px;border-radius:5px;font-size:0.8rem;font-weight:700;text-decoration:none;}
+.nav-cta:hover{background:#162d55;}
+
+/* ── HERO ── */
+.hero{background:var(--navy);padding:96px 60px 80px;position:relative;overflow:hidden;text-align:center;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(105,194,142,0.12) 0%,transparent 60%);}
+.hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.015) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.015) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+.hero-inner{position:relative;z-index:2;max-width:700px;margin:0 auto;}
+.mono-tag{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:20px;}
+.mono-tag::before,.mono-tag::after{content:'';width:20px;height:1px;background:var(--green);}
+h1{font-family:'DM Serif Display',serif;font-size:3.4rem;color:#fff;line-height:1.08;margin-bottom:20px;}
+h1 em{font-style:italic;color:var(--green);}
+.hero-sub{font-size:1rem;color:rgba(255,255,255,0.52);line-height:1.8;max-width:540px;margin:0 auto 36px;}
+.hero-ctas{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{background:var(--green);color:var(--navy);padding:14px 32px;border-radius:5px;font-size:0.92rem;font-weight:800;text-decoration:none;display:inline-block;transition:background .18s;}
+.btn-primary:hover{background:var(--green2);}
+.btn-outline{border:1.5px solid rgba(255,255,255,0.22);color:#fff;padding:13px 28px;border-radius:5px;font-size:0.88rem;font-weight:600;text-decoration:none;display:inline-block;transition:all .18s;}
+.btn-outline:hover{border-color:rgba(255,255,255,0.55);}
+
+/* ── STATS STRIP ── */
+.stats-strip{background:var(--white);border-bottom:1px solid var(--border);padding:28px 60px;display:grid;grid-template-columns:repeat(4,1fr);gap:0;}
+.stat-item{text-align:center;padding:0 20px;border-right:1px solid var(--border);}
+.stat-item:last-child{border-right:none;}
+.stat-val{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--navy);line-height:1;margin-bottom:4px;}
+.stat-val span{color:var(--green);}
+.stat-lbl{font-size:0.68rem;color:var(--muted);line-height:1.4;}
+
+/* ── SERVICES ── */
+.services{padding:80px 60px;background:var(--bg);}
+.section-tag{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);margin-bottom:12px;}
+.section-tag::before{content:'';width:16px;height:1px;background:var(--green);}
+h2{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--navy);line-height:1.15;margin-bottom:12px;}
+.section-intro{font-size:0.92rem;color:var(--muted);line-height:1.75;max-width:580px;margin-bottom:48px;}
+.services-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.service-card{background:var(--white);border:1.5px solid var(--border);border-radius:12px;padding:32px 28px;text-decoration:none;display:block;transition:all .2s;}
+.service-card:hover{border-color:var(--green);box-shadow:0 8px 32px rgba(15,32,67,0.08);transform:translateY(-3px);}
+.service-icon{font-size:1.8rem;margin-bottom:16px;display:block;}
+.service-title{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--navy);margin-bottom:8px;}
+.service-desc{font-size:0.8rem;color:var(--muted);line-height:1.7;margin-bottom:16px;}
+.service-link{font-size:0.78rem;font-weight:700;color:var(--green2);display:flex;align-items:center;gap:5px;}
+.service-link::after{content:'→';}
+
+/* ── HOE HET WERKT ── */
+.how{background:var(--navy);padding:80px 60px;}
+.how h2{color:#fff;}
+.how .section-intro{color:rgba(255,255,255,0.5);}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:48px;position:relative;}
+.steps::before{content:'';position:absolute;top:24px;left:8%;right:8%;height:1px;background:rgba(255,255,255,0.08);}
+.step{text-align:center;padding:0 12px;position:relative;z-index:1;}
+.step-circle{width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-family:'DM Serif Display',serif;font-size:1.1rem;color:#fff;}
+.step-circle.active{background:var(--green);border-color:var(--green);color:var(--navy);}
+.step-title{font-size:0.82rem;font-weight:700;color:#fff;margin-bottom:6px;}
+.step-desc{font-size:0.7rem;color:rgba(255,255,255,0.42);line-height:1.6;}
+
+/* ── CLIENTS ── */
+.clients{background:var(--white);padding:40px 60px;border-bottom:1px solid var(--border);}
+.clients-label{font-family:'Space Mono',monospace;font-size:0.5rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:20px;}
+.clients-logos{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;}
+.client-logo{font-size:0.72rem;font-weight:700;color:var(--border);letter-spacing:0.05em;text-transform:uppercase;}
+
+/* ── CTA ── */
+.cta{background:var(--navy);padding:80px 60px;text-align:center;position:relative;overflow:hidden;}
+.cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(105,194,142,0.1) 0%,transparent 60%);}
+.cta-inner{position:relative;z-index:2;max-width:580px;margin:0 auto;}
+.cta h2{color:#fff;font-size:2.2rem;}
+.cta p{font-size:0.9rem;color:rgba(255,255,255,0.48);line-height:1.75;margin:12px 0 32px;}
+.cta-ruben{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:16px 24px;max-width:380px;margin:24px auto 0;}
+.cta-av{width:44px;height:44px;border-radius:50%;object-fit:cover;border:2px solid var(--green);}
+.cta-av-name{font-size:0.8rem;font-weight:700;color:#fff;}
+.cta-av-sub{font-size:0.68rem;color:rgba(255,255,255,0.4);margin-top:2px;}
+
+/* ── FOOTER ── */
+footer{background:#070f1f;padding:48px 60px 32px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;}
+.footer-brand{}
+.footer-logo{height:18px;margin-bottom:12px;display:block;opacity:.8;}
+.footer-tagline{font-size:0.76rem;color:rgba(255,255,255,0.3);line-height:1.7;max-width:220px;}
+.footer-col h4{font-size:0.68rem;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px;}
+.footer-links{display:flex;flex-direction:column;gap:7px;}
+.footer-links a{font-size:0.78rem;color:rgba(255,255,255,0.4);text-decoration:none;transition:color .18s;}
+.footer-links a:hover{color:var(--green);}
+.footer-bottom{background:#070f1f;border-top:1px solid rgba(255,255,255,0.05);padding:16px 60px;display:flex;justify-content:space-between;align-items:center;}
+.footer-copy{font-size:0.68rem;color:rgba(255,255,255,0.2);}
+.footer-copy span{color:var(--green);}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <img class="nav-logo"
+    src="https://realadstate.nl/wp-content/uploads/2025/09/RealAdState_Logo_horizontaal_fullcolor.svg"
+    onerror="this.outerHTML='<span style=&quot;font-weight:800;font-size:1rem;color:var(--navy)&quot;>Real<span style=&quot;color:var(--green)&quot;>Adstate</span></span>'"
+    alt="Real Adstate">
+  <div class="nav-links">
+    <a class="nav-link active" href="/">Home</a>
+    <a class="nav-link" href="/makelaars/diensten">Voor Makelaars</a>
+    <a class="nav-link" href="/vastgoedontwikkelaars">Voor Vastgoedontwikkelaars</a>
+    <a class="nav-link" href="/cases">Cases</a>
+  </div>
+  <a class="nav-cta" href="mailto:ruben@realadstate.nl">Neem contact op</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="mono-tag">Meta Ads voor vastgoed</div>
+    <h1>Funda bereikt<br>niet iedereen.<br><em>Wij wel.</em></h1>
+    <p class="hero-sub">Real Adstate adverteert jouw woning of vastgoedproject op Facebook en Instagram — volledig in jouw huisstijl, meetbaar resultaat.</p>
+    <div class="hero-ctas">
+      <a href="/makelaars/diensten" class="btn-primary">Voor makelaars →</a>
+      <a href="/vastgoedontwikkelaars" class="btn-outline">Voor ontwikkelaars</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="stat-val">250<span>%</span></div>
+    <div class="stat-lbl">meer aanvragen<br>Arnhem case</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-val">1,5<span>wk</span></div>
+    <div class="stat-lbl">villa verkocht<br>via Meta Ads</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-val">48<span>u</span></div>
+    <div class="stat-lbl">campagne live<br>na Funda-link</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-val">70<span>K+</span></div>
+    <div class="stat-lbl">unieke weergaven<br>één campagne</div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services">
+  <div class="section-tag">Wat we doen</div>
+  <h2>Twee producten.<br>Één doel: meer leads.</h2>
+  <p class="section-intro">Of je nu makelaar bent die woningen sneller wil verkopen, of ontwikkelaar met een nieuwbouwproject — wij hebben een specifieke aanpak voor jouw situatie.</p>
+  <div class="services-grid">
+    <a class="service-card" href="/makelaars/diensten">
+      <span class="service-icon">🏠</span>
+      <div class="service-title">Voor Makelaars</div>
+      <p class="service-desc">Promoot woningaanbod of jouw makelaarsdiensten via Meta Ads. Volledig in jouw huisstijl, betaald door de verkoper of als maandabonnement.</p>
+      <div class="service-link">Bekijk het aanbod</div>
+    </a>
+    <a class="service-card" href="/vastgoedontwikkelaars">
+      <span class="service-icon">🏗️</span>
+      <div class="service-title">Voor Vastgoedontwikkelaars</div>
+      <p class="service-desc">Van pre-launch tot uitverkoop — wij bouwen de volledige verkoopfunnel voor jouw project op Meta, Google en LinkedIn.</p>
+      <div class="service-link">Bekijk de aanpak</div>
+    </a>
+  </div>
+</section>
+
+<!-- HOE HET WERKT -->
+<section class="how">
+  <div class="section-tag">Werkwijze</div>
+  <h2>Van Funda-link<br>tot campagne live.</h2>
+  <p class="section-intro">Geen briefings, geen wekelijkse afstemming. Jij stuurt de Funda-link — wij doen de rest.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-circle active">1</div>
+      <div class="step-title">Stuur de link</div>
+      <div class="step-desc">Kopieer de Funda-link van de woning en stuur hem op.</div>
+    </div>
+    <div class="step">
+      <div class="step-circle">2</div>
+      <div class="step-title">Wij maken de advertenties</div>
+      <div class="step-desc">Copy, visuals en targeting — volledig in jouw huisstijl.</div>
+    </div>
+    <div class="step">
+      <div class="step-circle">3</div>
+      <div class="step-title">Live binnen 48 uur</div>
+      <div class="step-desc">Campagne draait op Facebook en Instagram.</div>
+    </div>
+    <div class="step">
+      <div class="step-circle">4</div>
+      <div class="step-title">Jij ontvangt de leads</div>
+      <div class="step-desc">Bezichtigingsaanvragen direct in jouw mailbox.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<div class="clients">
+  <div class="clients-label">Wij werkten voor</div>
+  <div class="clients-logos">
+    <span class="client-logo">Cees Steur Makelaars</span>
+    <span class="client-logo">M Development</span>
+    <span class="client-logo">DHG</span>
+    <span class="client-logo">Wayland</span>
+    <span class="client-logo">Redstone</span>
+    <span class="client-logo">The Firm</span>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="cta-inner">
+    <div class="section-tag" style="justify-content:center;color:var(--green);">Gratis gesprek</div>
+    <h2>Klaar om te starten?</h2>
+    <p>Plan een vrijblijvend gesprek van 20 minuten. Wij kijken samen naar jouw situatie en geven een concreet advies.</p>
+    <a href="mailto:ruben@realadstate.nl" class="btn-primary">Plan een gesprek →</a>
+    <div class="cta-ruben">
+      <img class="cta-av"
+        src="https://realadstate.nl/wp-content/uploads/2025/09/ruben-200x200.jpg"
+        onerror="this.style.background='var(--green)'"
+        alt="Ruben">
+      <div>
+        <div class="cta-av-name">Ruben — Advertentiespecialist</div>
+        <div class="cta-av-sub">Reactie binnen 24 uur · Geen verplichtingen</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <img class="footer-logo"
+      src="https://realadstate.nl/wp-content/uploads/2025/09/Realadstate_logo_horizontaal_witgroen.svg"
+      onerror="this.outerHTML='<span style=&quot;font-weight:800;font-size:0.85rem;color:#fff&quot;>Real<span style=&quot;color:var(--green)&quot;>Adstate</span></span>'"
+      alt="Real Adstate">
+    <p class="footer-tagline">Meta Ads voor makelaars en vastgoedontwikkelaars in Nederland.</p>
+  </div>
+  <div class="footer-col">
+    <h4>Diensten</h4>
+    <div class="footer-links">
+      <a href="/makelaars/diensten">Voor Makelaars</a>
+      <a href="/vastgoedontwikkelaars">Voor Vastgoedontwikkelaars</a>
+      <a href="/cases">Cases</a>
+    </div>
+  </div>
+  <div class="footer-col">
+    <h4>Contact</h4>
+    <div class="footer-links">
+      <a href="mailto:ruben@realadstate.nl">ruben@realadstate.nl</a>
+      <a href="tel:+31202101769">+31 (0)20 210 17 69</a>
+      <a href="#">Naritaweg 127, Amsterdam</a>
+    </div>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <span class="footer-copy">© 2025 <span>Real Adstate</span> — Alle rechten voorbehouden</span>
+  <span class="footer-copy">realadstate.nl</span>
+</div>
+
+</body>
+</html>

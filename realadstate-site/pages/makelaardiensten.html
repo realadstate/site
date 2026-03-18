@@ -1,0 +1,2196 @@
+<!--
+╔══════════════════════════════════════════════════════════════╗
+  REAL ADSTATE — WEBFLOW IMPORT: MAKELAARSDIENSTEN PROMOTEN
+  URL: realadstate.nl/makelaars/diensten
+╠══════════════════════════════════════════════════════════════╣
+  STAPPEN:
+  1. Open Webflow → jouw project → Pages → New Page
+  2. Stel slug in op: /makelaars/diensten
+  3. Open de pagina → Designer view
+  4. Voeg per sectie een "HTML Embed" component toe
+  5. Kopieer elke sectie uit dit bestand in het juiste embed-blok
+
+  SECTIES IN DIT BESTAND (zie markers in de HTML):
+  - Nav: Webflow navbar component → vervang door eigen Webflow nav
+  - Hero: statische sectie → bewerkbaar via drag & drop
+  - Vergelijking, diensten, FAQ: statische secties
+  - Quiz (section id="check"): plak embed-quiz.html in een Embed component
+
+  GLOBAL CSS:
+  Zorg dat webflow-global.css al is toegevoegd via:
+  Site Settings → Custom Code → <head> sectie
+╚══════════════════════════════════════════════════════════════╝
+-->
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Makelaarsdiensten promoten — Real Adstate</title>
+<!--
+  WEBFLOW: Voeg webflow-global.css toe via Site Settings → Custom Code
+  De <style> hieronder bevat pagina-specifieke stijlen.
+  In Webflow plak je deze in: Page Settings → Custom Code → <head>
+-->
+<style>
+/* ─── TOKENS ─── */
+:root {
+  --navy:   #0F2043;
+  --green:  #69C28E;
+  --green2: #4aab76;
+  --gd:     rgba(105,194,142,0.12);
+  --gb:     rgba(105,194,142,0.28);
+  --bg:     #F8F9FC;
+  --white:  #FFFFFF;
+  --text:   #1A2B47;
+  --muted:  #6B7A99;
+  --border: #E2E8F0;
+  --navy10: rgba(15,32,67,0.06);
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; }
+
+/* ─── NAV ─── */
+nav {
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  position:sticky; top:0; z-index:100;
+  padding:0 60px;
+  display:flex; align-items:center; height:68px;
+}
+.nav-logo { height:22px; display:block; margin-right:48px; }
+.nav-links { display:flex; gap:0; }
+.nav-link {
+  padding:0 18px; height:68px;
+  display:flex; align-items:center;
+  font-size:0.82rem; font-weight:500; color:var(--muted);
+  text-decoration:none; border-bottom:2px solid transparent;
+  transition:all .18s; white-space:nowrap; position:relative;
+}
+.nav-link:hover { color:var(--navy); }
+.nav-link.active { color:var(--navy); border-bottom-color:var(--green); font-weight:600; }
+.nav-dropdown { position:relative; }
+.nav-dropdown:hover .dropdown-menu { display:block; }
+.dropdown-menu {
+  display:none; position:absolute; top:100%; left:0;
+  background:var(--white); border:1px solid var(--border);
+  border-radius:8px; box-shadow:0 8px 32px rgba(15,32,67,0.12);
+  min-width:240px; padding:8px 0; z-index:200;
+}
+.dropdown-item {
+  display:block; padding:10px 18px;
+  font-size:0.8rem; font-weight:500; color:var(--muted);
+  text-decoration:none; transition:all .15s;
+  border-left:2px solid transparent;
+}
+.dropdown-item:hover { color:var(--navy); background:var(--bg); }
+.dropdown-item.current { color:var(--navy); font-weight:600; border-left-color:var(--green); background:var(--gd); }
+.dropdown-arrow { font-size:0.6rem; margin-left:5px; opacity:.5; }
+.nav-cta {
+  margin-left:auto;
+  background:var(--navy); color:var(--white);
+  padding:9px 22px; border-radius:5px;
+  font-size:0.8rem; font-weight:700; text-decoration:none;
+  transition:background .18s;
+}
+.nav-cta:hover { background:#162d55; }
+
+/* ─── BREADCRUMB ─── */
+.breadcrumb {
+  background:var(--white); border-bottom:1px solid var(--border);
+  padding:10px 60px; display:flex; align-items:center; gap:6px;
+  font-size:0.72rem; color:var(--muted);
+}
+.bc-link { color:var(--muted); text-decoration:none; }
+.bc-link:hover { color:var(--navy); }
+.bc-sep { opacity:.4; }
+.bc-cur { color:var(--navy); font-weight:600; }
+
+/* ─── HERO ─── */
+.hero {
+  background:var(--navy);
+  padding:80px 60px 0;
+  display:grid; grid-template-columns:1fr 480px; gap:60px; align-items:end;
+  overflow:hidden; position:relative;
+}
+.hero::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 70% 0%, rgba(105,194,142,0.1) 0%, transparent 60%);
+  pointer-events:none;
+}
+.hero-tag {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Space Mono',monospace; font-size:0.56rem;
+  letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--green); margin-bottom:18px;
+}
+.hero-tag::before { content:''; width:20px; height:1px; background:var(--green); }
+.hero-eyebrow {
+  font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.45);
+  letter-spacing:0.06em; text-transform:uppercase; margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.hero-eyebrow a { color:rgba(255,255,255,0.45); text-decoration:none; }
+.hero-eyebrow a:hover { color:rgba(255,255,255,0.7); }
+.hero-eyebrow span { opacity:.4; }
+h1 {
+  font-family:'DM Serif Display',serif;
+  font-size:3rem; color:#fff; line-height:1.1;
+  margin-bottom:22px;
+}
+h1 em { font-style:italic; color:var(--green); }
+.hero-sub {
+  font-size:1rem; color:rgba(255,255,255,0.62);
+  line-height:1.7; max-width:520px; margin-bottom:32px;
+}
+.hero-bullets { display:flex; flex-direction:column; gap:10px; margin-bottom:36px; }
+.hero-bullet {
+  display:flex; align-items:center; gap:10px;
+  font-size:0.88rem; color:rgba(255,255,255,0.78);
+}
+.hero-bullet::before {
+  content:''; width:7px; height:7px; border-radius:50%;
+  background:var(--green); flex-shrink:0;
+}
+.hero-ctas { display:flex; gap:12px; flex-wrap:wrap; }
+.btn-primary {
+  background:var(--green); color:var(--navy);
+  padding:13px 28px; border-radius:5px;
+  font-size:0.85rem; font-weight:800; text-decoration:none;
+  transition:background .18s; display:inline-block;
+}
+.btn-primary:hover { background:var(--green2); }
+.btn-outline {
+  border:1.5px solid rgba(255,255,255,0.25); color:#fff;
+  padding:12px 24px; border-radius:5px;
+  font-size:0.85rem; font-weight:600; text-decoration:none;
+  transition:all .18s; display:inline-block;
+}
+.btn-outline:hover { border-color:rgba(255,255,255,0.6); }
+
+/* Hero visual */
+.hero-visual {
+  position:relative; align-self:end;
+  height:420px; display:flex; align-items:flex-end; justify-content:center;
+}
+.hero-phone {
+  width:200px; background:var(--navy);
+  border:2px solid rgba(255,255,255,0.12);
+  border-radius:28px; overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  position:relative; z-index:2;
+}
+.phone-notch {
+  background:#000; height:28px;
+  display:flex; align-items:center; justify-content:center;
+}
+.phone-dot { width:8px; height:8px; border-radius:50%; background:#1a1a1a; }
+.phone-screen { padding:0; }
+.phone-ig-head {
+  background:var(--white); padding:6px 8px;
+  display:flex; align-items:center; gap:6px;
+}
+.phone-av {
+  width:22px; height:22px; border-radius:50%;
+  background:var(--navy); border:1.5px solid #e1306c;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.38rem; font-weight:800; color:#fff;
+}
+.phone-acct { font-size:0.52rem; font-weight:700; color:#1a1a1a; }
+.phone-spon { font-size:0.44rem; color:#888; }
+.phone-img {
+  aspect-ratio:1/1; background:var(--navy);
+  position:relative; overflow:hidden;
+  display:flex; align-items:flex-end;
+}
+.phone-img-bg {
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, #0f2043 0%, #1a3a60 50%, #0d2a1e 100%);
+}
+.phone-img-content {
+  position:relative; z-index:2; padding:8px;
+  width:100%;
+}
+.phone-cap { background:var(--white); padding:5px 8px; }
+.phone-cap-txt { font-size:0.5rem; color:#1a1a1a; line-height:1.4; }
+.phone-more {
+  background:#f0f2f5; border-top:1px solid #e4e6eb;
+  padding:5px 8px; display:flex; justify-content:space-between;
+  align-items:center; font-size:0.5rem; font-weight:700; color:#1a1a1a;
+}
+
+/* Floating stats */
+.hero-stat {
+  position:absolute; background:var(--white);
+  border-radius:10px; padding:12px 16px;
+  box-shadow:0 8px 32px rgba(15,32,67,0.15);
+  min-width:140px;
+}
+.hs-1 { bottom:120px; right:-20px; }
+.hs-2 { top:60px; left:-30px; }
+.hs-val { font-family:'DM Serif Display',serif; font-size:1.4rem; color:var(--navy); line-height:1; margin-bottom:3px; }
+.hs-val span { color:var(--green); }
+.hs-lbl { font-size:0.62rem; color:var(--muted); line-height:1.4; }
+.hs-tag {
+  font-family:'Space Mono',monospace; font-size:0.44rem;
+  color:var(--green); letter-spacing:0.12em; text-transform:uppercase;
+  margin-bottom:4px;
+}
+
+/* ─── ONDERSCHEID BANNER ─── */
+.diff-banner {
+  background:var(--gd); border-top:1px solid var(--gb); border-bottom:1px solid var(--gb);
+  padding:20px 60px;
+  display:flex; align-items:center; gap:16px;
+}
+.diff-icon { font-size:1.2rem; }
+.diff-txt { font-size:0.82rem; color:var(--navy); line-height:1.5; }
+.diff-txt strong { font-weight:700; }
+.diff-sep { width:1px; height:32px; background:var(--gb); margin:0 8px; }
+.diff-pill {
+  margin-left:auto; white-space:nowrap;
+  background:var(--navy); color:var(--white);
+  font-size:0.7rem; font-weight:700; padding:7px 16px; border-radius:20px;
+  text-decoration:none;
+}
+
+/* ─── SECTION WRAPPER ─── */
+.section { padding:80px 60px; }
+.section.alt { background:var(--white); }
+.section.dark { background:var(--navy); }
+.section-tag {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Space Mono',monospace; font-size:0.54rem;
+  letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--green); margin-bottom:12px;
+}
+.section-tag::before { content:''; width:16px; height:1px; background:var(--green); }
+h2 {
+  font-family:'DM Serif Display',serif;
+  font-size:2rem; color:var(--navy); line-height:1.15;
+  margin-bottom:12px;
+}
+.section.dark h2 { color:#fff; }
+.section-intro { font-size:0.92rem; color:var(--muted); line-height:1.75; max-width:620px; }
+.section.dark .section-intro { color:rgba(255,255,255,0.55); }
+
+/* ─── DIENSTEN CARDS ─── */
+.diensten-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+  margin-top:48px;
+}
+.dienst-card {
+  background:var(--white); border:1px solid var(--border);
+  border-radius:12px; overflow:hidden;
+  transition:box-shadow .2s, transform .2s;
+  cursor:pointer;
+}
+.dienst-card:hover { box-shadow:0 12px 40px rgba(15,32,67,0.1); transform:translateY(-3px); }
+.dienst-card-top {
+  padding:28px 24px 20px;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.dienst-icon {
+  width:44px; height:44px; border-radius:10px;
+  background:var(--gd); border:1px solid var(--gb);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.2rem; margin-bottom:16px;
+}
+.dienst-num {
+  position:absolute; top:20px; right:20px;
+  font-family:'Space Mono',monospace; font-size:0.52rem;
+  color:var(--border); letter-spacing:0.1em;
+}
+h3 {
+  font-family:'DM Serif Display',serif;
+  font-size:1.15rem; color:var(--navy); line-height:1.2;
+  margin-bottom:8px;
+}
+.dienst-sub { font-size:0.78rem; color:var(--muted); line-height:1.65; }
+.dienst-card-bottom { padding:18px 24px; background:var(--bg); }
+.dienst-roi {
+  display:flex; align-items:center; gap:8px;
+  margin-bottom:10px;
+}
+.roi-val { font-size:1rem; font-weight:800; color:var(--navy); }
+.roi-lbl { font-size:0.68rem; color:var(--muted); line-height:1.3; }
+.dienst-tags { display:flex; gap:5px; flex-wrap:wrap; }
+.dtag {
+  font-size:0.62rem; font-weight:500;
+  background:var(--navy10); border:1px solid var(--border);
+  color:var(--navy); padding:3px 9px; border-radius:3px;
+}
+.dtag.green { background:var(--gd); border-color:var(--gb); color:var(--green2); font-weight:700; }
+
+/* ─── VERGELIJKING ─── */
+.vergelijk {
+  display:grid; grid-template-columns:1fr 1fr; gap:0;
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  margin-top:48px;
+}
+.verg-col { padding:36px 32px; }
+.verg-col.left { background:var(--white); border-right:1px solid var(--border); }
+.verg-col.right { background:var(--gd); }
+.verg-tag { font-family:'Space Mono',monospace; font-size:0.52rem; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px; }
+.verg-tag.navy { color:var(--navy); }
+.verg-tag.green { color:var(--green2); }
+.verg-title { font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--navy); margin-bottom:6px; }
+.verg-sub { font-size:0.78rem; color:var(--muted); line-height:1.6; margin-bottom:24px; }
+.verg-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 0; border-bottom:1px solid var(--border);
+  font-size:0.8rem;
+}
+.verg-row:last-child { border:none; }
+.verg-lbl { color:var(--muted); }
+.verg-val { font-weight:600; color:var(--navy); text-align:right; }
+.verg-val.green { color:var(--green2); }
+
+/* ─── HOE HET WERKT ─── */
+.process { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:48px; position:relative; }
+.process::before {
+  content:''; position:absolute;
+  top:32px; left:10%; right:10%; height:1px;
+  background:var(--border); z-index:0;
+}
+.process-step { padding:0 16px; text-align:center; position:relative; z-index:1; }
+.step-circle {
+  width:64px; height:64px; border-radius:50%;
+  background:var(--white); border:1.5px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 18px; position:relative;
+  box-shadow:0 2px 12px rgba(15,32,67,0.06);
+}
+.step-circle.active {
+  background:var(--navy); border-color:var(--navy);
+}
+.step-circle.active .step-n { color:#fff; }
+.step-n { font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--navy); }
+.step-title { font-size:0.85rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+.step-desc { font-size:0.75rem; color:var(--muted); line-height:1.6; }
+.step-icon { font-size:1.1rem; }
+
+/* ─── PRIJZEN ─── */
+.prijzen-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:48px; }
+.prijs-card {
+  background:var(--white); border:1.5px solid var(--border);
+  border-radius:12px; padding:28px 24px; position:relative;
+}
+.prijs-card.featured {
+  border-color:var(--green); background:var(--navy);
+  box-shadow:0 12px 40px rgba(15,32,67,0.18);
+}
+.prijs-card.featured * { color:#fff !important; }
+.prijs-badge {
+  position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+  background:var(--green); color:var(--navy) !important;
+  font-size:0.62rem; font-weight:800; padding:4px 14px; border-radius:20px;
+  white-space:nowrap;
+}
+.prijs-name { font-size:0.7rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; }
+.prijs-amount { font-family:'DM Serif Display',serif; font-size:2.2rem; color:var(--navy); line-height:1; margin-bottom:4px; }
+.prijs-period { font-size:0.72rem; color:var(--muted); margin-bottom:20px; }
+.prijs-divider { height:1px; background:var(--border); margin-bottom:18px; }
+.prijs-card.featured .prijs-divider { background:rgba(255,255,255,0.12); }
+.prijs-features { display:flex; flex-direction:column; gap:9px; margin-bottom:22px; }
+.pf { display:flex; align-items:flex-start; gap:8px; font-size:0.78rem; color:var(--text); line-height:1.4; }
+.pf::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; margin-top:1px; }
+.prijs-card.featured .pf::before { color:var(--green); }
+.prijs-cta {
+  display:block; text-align:center; padding:11px;
+  border-radius:5px; font-size:0.82rem; font-weight:700; text-decoration:none;
+  background:var(--bg); color:var(--navy); border:1.5px solid var(--border);
+  transition:all .18s;
+}
+.prijs-card.featured .prijs-cta { background:var(--green); color:var(--navy); border-color:var(--green); }
+.prijs-cta:hover { background:var(--navy); color:#fff; border-color:var(--navy); }
+.prijs-card.featured .prijs-cta:hover { background:var(--green2); border-color:var(--green2); }
+.prijs-note { font-size:0.68rem; color:var(--muted); text-align:center; margin-top:8px; }
+.prijs-card.featured .prijs-note { color:rgba(255,255,255,0.4); }
+
+/* ─── VOOR WIE ─── */
+.voorwie-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:48px; }
+.vw-card {
+  border:1px solid var(--border); border-radius:10px; padding:22px 20px;
+  background:var(--white); transition:all .2s;
+}
+.vw-card:hover { border-color:var(--green); box-shadow:0 6px 24px rgba(15,32,67,0.07); }
+.vw-emoji { font-size:1.6rem; margin-bottom:12px; display:block; }
+.vw-title { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+.vw-desc { font-size:0.76rem; color:var(--muted); line-height:1.65; }
+
+/* ─── TESTIMONIAL ─── */
+.testimonial {
+  background:var(--navy); border-radius:12px;
+  padding:48px; margin-top:48px;
+  display:grid; grid-template-columns:auto 1fr; gap:40px; align-items:center;
+}
+.t-av { width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid var(--green); flex-shrink:0; }
+.t-quote-mark { font-family:'DM Serif Display',serif; font-size:3rem; color:var(--green); line-height:1; margin-bottom:10px; }
+.t-text { font-size:1rem; color:rgba(255,255,255,0.85); line-height:1.75; font-style:italic; margin-bottom:14px; }
+.t-name { font-size:0.82rem; font-weight:700; color:#fff; }
+.t-co { font-size:0.72rem; color:rgba(255,255,255,0.45); }
+.t-stats { display:flex; gap:32px; margin-top:20px; }
+.t-stat-val { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--green); line-height:1; }
+.t-stat-lbl { font-size:0.65rem; color:rgba(255,255,255,0.45); margin-top:2px; }
+
+/* ─── QUIZ SECTIE ─── */
+.quiz-section {
+  background:var(--navy); padding:96px 60px 80px;
+  position:relative; overflow:hidden;
+}
+.quiz-section::before {
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 20% 100%, rgba(105,194,142,0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 0%, rgba(105,194,142,0.09) 0%, transparent 50%);
+  pointer-events:none;
+}
+/* Subtle grid texture */
+.quiz-section::after {
+  content:''; position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+}
+.quiz-wrap {
+  max-width:800px; margin:0 auto; position:relative; z-index:1;
+}
+
+/* Intro */
+.quiz-intro { text-align:center; margin-bottom:56px; }
+.quiz-intro-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Space Mono',monospace; font-size:0.52rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--green); margin-bottom:18px;
+  background:rgba(105,194,142,0.08); border:1px solid rgba(105,194,142,0.2);
+  padding:6px 16px; border-radius:20px;
+}
+.quiz-intro-eyebrow::before { content:'◆'; font-size:0.4rem; }
+.quiz-intro h2 {
+  font-family:'DM Serif Display',serif; font-size:2.5rem; color:#fff;
+  margin-bottom:14px; line-height:1.1;
+}
+.quiz-intro h2 em { color:var(--green); font-style:italic; }
+.quiz-intro p { font-size:0.88rem; color:rgba(255,255,255,0.42); max-width:440px; margin:0 auto; line-height:1.75; }
+
+/* Step dots */
+.quiz-dots {
+  display:flex; align-items:center; justify-content:center;
+  gap:0; margin-bottom:40px;
+}
+.qdot {
+  width:28px; height:28px; border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.15);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Space Mono',monospace; font-size:0.56rem; color:rgba(255,255,255,0.25);
+  transition:all .35s cubic-bezier(.22,1,.36,1);
+  flex-shrink:0; position:relative; z-index:1; background:var(--navy);
+}
+.qdot.done {
+  border-color:var(--green); background:var(--green); color:var(--navy);
+  font-weight:800;
+}
+.qdot.active {
+  border-color:var(--green); color:var(--green); font-weight:700;
+  box-shadow:0 0 0 4px rgba(105,194,142,0.15);
+}
+.qdot-line {
+  flex:1; height:1px; background:rgba(255,255,255,0.1);
+  transition:background .35s;
+  max-width:80px; min-width:20px;
+}
+.qdot-line.done { background:rgba(105,194,142,0.45); }
+.qdot-label {
+  position:absolute; top:calc(100% + 7px); left:50%; transform:translateX(-50%);
+  font-size:0.48rem; font-family:'Space Mono',monospace; text-transform:uppercase;
+  letter-spacing:0.1em; white-space:nowrap;
+  color:rgba(255,255,255,0.25); transition:color .3s;
+}
+.qdot.active .qdot-label { color:var(--green); }
+.qdot.done .qdot-label { color:rgba(105,194,142,0.55); }
+
+/* Question card */
+.quiz-card {
+  display:none;
+  animation:qrise .38s cubic-bezier(.22,1,.36,1);
+}
+.quiz-card.active { display:block; }
+@keyframes qrise {
+  from { opacity:0; transform:translateY(18px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes qleave {
+  from { opacity:1; transform:translateY(0); }
+  to   { opacity:0; transform:translateY(-12px); }
+}
+
+.quiz-qnumber {
+  font-family:'Space Mono',monospace; font-size:0.5rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:rgba(255,255,255,0.22); margin-bottom:10px;
+}
+.quiz-q {
+  font-family:'DM Serif Display',serif;
+  font-size:1.65rem; color:#fff; line-height:1.2;
+  margin-bottom:6px;
+}
+.quiz-qsub {
+  font-size:0.76rem; color:rgba(255,255,255,0.32);
+  margin-bottom:32px; line-height:1.55; max-width:540px;
+}
+
+/* Answer options */
+.quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:36px; }
+.quiz-options.cols-1 { grid-template-columns:1fr; }
+.qopt {
+  background:rgba(255,255,255,0.03);
+  border:1.5px solid rgba(255,255,255,0.09);
+  border-radius:12px; padding:18px 20px;
+  cursor:pointer; transition:all .2s;
+  display:flex; align-items:flex-start; gap:14px;
+  text-align:left; position:relative; overflow:hidden;
+}
+.qopt::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(105,194,142,0.06) 0%, transparent 70%);
+  opacity:0; transition:opacity .2s;
+}
+.qopt:hover { border-color:rgba(105,194,142,0.3); transform:translateY(-1px); box-shadow:0 4px 20px rgba(0,0,0,0.2); }
+.qopt:hover::before { opacity:1; }
+.qopt.selected { border-color:var(--green); background:rgba(105,194,142,0.08); }
+.qopt.selected::before { opacity:1; }
+.qopt-icon {
+  width:40px; height:40px; border-radius:10px;
+  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.15rem; flex-shrink:0; transition:all .2s; margin-top:1px;
+}
+.qopt.selected .qopt-icon { background:rgba(105,194,142,0.15); border-color:rgba(105,194,142,0.3); }
+.qopt-body { flex:1; }
+.qopt-main { font-size:0.86rem; font-weight:600; color:#fff; margin-bottom:4px; line-height:1.3; }
+.qopt-sub { font-size:0.7rem; color:rgba(255,255,255,0.36); line-height:1.45; }
+.qopt-radio {
+  width:18px; height:18px; border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.18);
+  flex-shrink:0; margin-top:3px; transition:all .2s;
+  display:flex; align-items:center; justify-content:center;
+}
+.qopt.selected .qopt-radio {
+  border-color:var(--green); background:var(--green);
+}
+.qopt.selected .qopt-radio::after {
+  content:''; width:6px; height:6px; border-radius:50%;
+  background:var(--navy); display:block;
+}
+
+/* Nav row */
+.quiz-nav {
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.qbtn-back {
+  background:none; border:1px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.4); padding:10px 20px; border-radius:8px;
+  font-size:0.78rem; font-weight:600; cursor:pointer; font-family:inherit;
+  transition:all .18s; letter-spacing:0.01em;
+}
+.qbtn-back:hover { border-color:rgba(255,255,255,0.3); color:rgba(255,255,255,0.7); }
+.qbtn-back:disabled { opacity:0.15; cursor:default; pointer-events:none; }
+.quiz-nav-hint {
+  font-size:0.68rem; color:rgba(255,255,255,0.18);
+  font-family:'Space Mono',monospace;
+}
+.qbtn-next {
+  background:var(--green); color:var(--navy);
+  border:none; padding:12px 30px; border-radius:8px;
+  font-size:0.86rem; font-weight:800; cursor:pointer; font-family:inherit;
+  transition:all .2s; display:flex; align-items:center; gap:9px;
+  box-shadow:0 4px 16px rgba(105,194,142,0.25);
+}
+.qbtn-next:hover { background:var(--green2); transform:translateY(-1px); box-shadow:0 6px 20px rgba(105,194,142,0.35); }
+.qbtn-next:disabled { opacity:0.3; cursor:default; transform:none; box-shadow:none; }
+.qbtn-arrow { font-size:1rem; line-height:1; }
+
+/* ─── RESULT SCREEN ─── */
+.quiz-result {
+  display:none;
+  animation:qrise .45s cubic-bezier(.22,1,.36,1);
+}
+.quiz-result.active { display:block; }
+
+/* Result header */
+.result-top {
+  text-align:center; padding:0 0 48px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  margin-bottom:36px;
+}
+.result-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(105,194,142,0.1); border:1px solid rgba(105,194,142,0.25);
+  border-radius:24px; padding:7px 18px;
+  font-family:'Space Mono',monospace; font-size:0.52rem;
+  letter-spacing:0.14em; text-transform:uppercase; color:var(--green);
+  margin-bottom:20px;
+}
+.result-badge::before { content:'✦'; font-size:0.5rem; }
+.result-title { font-family:'DM Serif Display',serif; font-size:2.1rem; color:#fff; line-height:1.15; margin-bottom:12px; }
+.result-sub { font-size:0.84rem; color:rgba(255,255,255,0.42); max-width:500px; margin:0 auto; line-height:1.75; }
+
+/* Three insight cards */
+.result-cards {
+  display:grid; grid-template-columns:1.15fr 1fr 1fr; gap:14px;
+  margin-bottom:32px;
+}
+.rcard {
+  border-radius:14px; padding:24px 22px; position:relative; overflow:hidden;
+}
+.rcard.primary {
+  background:linear-gradient(135deg, rgba(105,194,142,0.14) 0%, rgba(105,194,142,0.06) 100%);
+  border:1.5px solid rgba(105,194,142,0.3);
+}
+.rcard.secondary {
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+}
+.rcard-eyebrow {
+  font-family:'Space Mono',monospace; font-size:0.46rem;
+  letter-spacing:0.16em; text-transform:uppercase;
+  color:rgba(255,255,255,0.3); margin-bottom:12px;
+  display:flex; align-items:center; gap:6px;
+}
+.rcard.primary .rcard-eyebrow { color:var(--green); }
+.rcard-eyebrow::before { content:''; width:10px; height:1px; background:currentColor; }
+.rcard-title { font-size:0.82rem; font-weight:600; color:rgba(255,255,255,0.65); margin-bottom:8px; }
+.rcard-val {
+  font-family:'DM Serif Display',serif; font-size:1.9rem; color:#fff;
+  line-height:1; margin-bottom:6px;
+}
+.rcard.primary .rcard-val { color:var(--green); font-size:2.2rem; }
+.rcard-price { font-size:0.72rem; color:rgba(255,255,255,0.35); margin-bottom:10px; }
+.rcard.primary .rcard-price { color:rgba(105,194,142,0.55); }
+.rcard-sub { font-size:0.68rem; color:rgba(255,255,255,0.3); line-height:1.55; }
+
+/* Pakket features pills */
+.rcard-features { display:flex; flex-direction:column; gap:6px; margin-top:12px; }
+.rf {
+  display:flex; align-items:center; gap:7px;
+  font-size:0.7rem; color:rgba(255,255,255,0.55); line-height:1.3;
+}
+.rf::before { content:'✓'; color:var(--green); font-size:0.65rem; font-weight:800; flex-shrink:0; }
+
+/* Ruben block */
+.result-ruben {
+  background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(105,194,142,0.04) 100%);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:14px; padding:28px 32px;
+  display:grid; grid-template-columns:auto 1fr auto; gap:24px; align-items:center;
+  position:relative; overflow:hidden;
+}
+.result-ruben::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--green); border-radius:3px 0 0 3px;
+}
+.rr-av { width:58px; height:58px; border-radius:50%; object-fit:cover; border:2px solid var(--green); flex-shrink:0; }
+.rr-name { font-size:0.9rem; font-weight:700; color:#fff; margin-bottom:5px; }
+.rr-sub { font-size:0.73rem; color:rgba(255,255,255,0.4); line-height:1.6; }
+.rr-actions { display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.rr-btn-primary {
+  background:var(--green); color:var(--navy);
+  border:none; padding:11px 24px; border-radius:7px;
+  font-size:0.8rem; font-weight:800; cursor:pointer; font-family:inherit;
+  text-decoration:none; display:block; text-align:center; white-space:nowrap;
+  transition:all .18s; box-shadow:0 3px 12px rgba(105,194,142,0.3);
+}
+.rr-btn-primary:hover { background:var(--green2); transform:translateY(-1px); }
+.rr-btn-secondary {
+  background:none; border:1px solid rgba(255,255,255,0.15);
+  color:rgba(255,255,255,0.55); padding:10px 24px; border-radius:7px;
+  font-size:0.76rem; font-weight:600; cursor:pointer; font-family:inherit;
+  text-decoration:none; display:block; text-align:center; white-space:nowrap;
+  transition:all .18s;
+}
+.rr-btn-secondary:hover { border-color:rgba(255,255,255,0.35); color:#fff; }
+
+/* Disclaimer + restart */
+.result-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:20px; padding-top:16px;
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+.result-disclaimer { font-size:0.64rem; color:rgba(255,255,255,0.2); line-height:1.5; max-width:400px; }
+.restart-btn {
+  background:none; border:none; color:rgba(255,255,255,0.22);
+  font-size:0.7rem; cursor:pointer; font-family:inherit;
+  display:flex; align-items:center; gap:5px;
+  transition:color .18s; white-space:nowrap; flex-shrink:0;
+}
+.restart-btn:hover { color:rgba(255,255,255,0.5); }
+
+/* ─── FOOTER NAV HINT ─── */
+.page-nav {
+  background:var(--white); border-top:1px solid var(--border);
+  padding:24px 60px; display:flex; align-items:center; justify-content:space-between;
+}
+.pnav-prev, .pnav-next {
+  display:flex; align-items:center; gap:10px; text-decoration:none;
+  padding:10px 18px; border-radius:6px; border:1px solid var(--border);
+  transition:all .18s;
+}
+.pnav-prev:hover, .pnav-next:hover { border-color:var(--green); background:var(--gd); }
+.pnav-dir { font-size:0.62rem; color:var(--muted); font-family:'Space Mono',monospace; letter-spacing:0.1em; text-transform:uppercase; }
+.pnav-title { font-size:0.82rem; font-weight:600; color:var(--navy); }
+
+/* ─── WIREFRAME ANNOTATION ─── */
+.wf-note {
+  display:inline-flex; align-items:center; gap:6px;
+  background:#FFF8E7; border:1px solid #F5CC5A;
+  border-radius:4px; padding:5px 12px;
+  font-family:'Space Mono',monospace; font-size:0.56rem;
+  color:#8B6914; letter-spacing:0.06em; margin-bottom:24px;
+}
+
+/* ─── FAQ ─── */
+.faq { max-width:720px; margin:48px auto 0; }
+.faq-item { border-bottom:1px solid var(--border); }
+.faq-q {
+  padding:18px 0; display:flex; justify-content:space-between; align-items:center;
+  font-size:0.88rem; font-weight:600; color:var(--navy); cursor:pointer;
+}
+.faq-q:hover { color:var(--green2); }
+.faq-icon { color:var(--green); font-size:1.1rem; flex-shrink:0; }
+.faq-a { padding:0 0 16px; font-size:0.8rem; color:var(--muted); line-height:1.7; }
+
+/* ─── AD MOCKUP ─── */
+.ad-preview {
+  width:260px; background:#fff; border-radius:8px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.15); overflow:hidden;
+  font-family:-apple-system,sans-serif; flex-shrink:0;
+}
+.ap-bar { background:#1877f2; padding:6px 8px; display:flex; align-items:center; }
+.ap-f { color:#fff; font-weight:900; font-size:0.85rem; letter-spacing:-1px; }
+.ap-hd { padding:7px 9px; display:flex; align-items:center; gap:6px; background:#fff; }
+.ap-av { width:26px; height:26px; border-radius:50%; background:var(--navy); display:flex; align-items:center; justify-content:center; font-size:0.44rem; font-weight:800; color:#fff; flex-shrink:0; }
+.ap-nm { font-size:0.6rem; font-weight:700; color:#1a1a1a; }
+.ap-sp { font-size:0.5rem; color:#888; }
+.ap-img {
+  aspect-ratio:1.91/1; background:var(--navy); position:relative; overflow:hidden;
+  display:flex; align-items:flex-end; justify-content:flex-start; padding:9px;
+}
+.ap-img-bg { position:absolute; inset:0; background:linear-gradient(135deg,#0f2043 0%,#1a3a5c 60%,#0d2a1e 100%); }
+.ap-img-veil { position:absolute; bottom:0; left:0; right:0; height:55%; background:linear-gradient(0deg,rgba(6,10,24,.85),transparent); }
+.ap-img-content { position:relative; z-index:2; }
+.ap-tx { padding:5px 9px 6px; font-size:0.58rem; color:#1a1a1a; line-height:1.45; background:#fff; }
+.ap-lk { background:#f0f2f5; border-top:1px solid #e4e6eb; padding:6px 9px; display:flex; align-items:center; justify-content:space-between; }
+.ap-ld { font-size:0.44rem; color:#888; text-transform:uppercase; }
+.ap-lt { font-size:0.56rem; font-weight:700; color:#1a1a1a; margin-top:1px; }
+.ap-bt { background:var(--green); color:var(--navy); border:none; border-radius:4px; padding:5px 10px; font-size:0.56rem; font-weight:700; cursor:pointer; }
+</style>
+</head>
+<body>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Makelaarsdiensten Promoten — Real Adstate</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─── */
+:root {
+  --navy:   #0F2043;
+  --green:  #69C28E;
+  --green2: #4aab76;
+  --gd:     rgba(105,194,142,0.12);
+  --gb:     rgba(105,194,142,0.28);
+  --bg:     #F8F9FC;
+  --white:  #FFFFFF;
+  --text:   #1A2B47;
+  --muted:  #6B7A99;
+  --border: #E2E8F0;
+  --navy10: rgba(15,32,67,0.06);
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; }
+
+/* ─── NAV ─── */
+nav {
+  background:var(--white);
+  border-bottom:1px solid var(--border);
+  position:sticky; top:0; z-index:100;
+  padding:0 60px;
+  display:flex; align-items:center; height:68px;
+}
+.nav-logo { height:22px; display:block; margin-right:48px; }
+.nav-links { display:flex; gap:0; }
+.nav-link {
+  padding:0 18px; height:68px;
+  display:flex; align-items:center;
+  font-size:0.82rem; font-weight:500; color:var(--muted);
+  text-decoration:none; border-bottom:2px solid transparent;
+  transition:all .18s; white-space:nowrap; position:relative;
+}
+.nav-link:hover { color:var(--navy); }
+.nav-link.active { color:var(--navy); border-bottom-color:var(--green); font-weight:600; }
+.nav-dropdown { position:relative; }
+.nav-dropdown:hover .dropdown-menu { display:block; }
+.dropdown-menu {
+  display:none; position:absolute; top:100%; left:0;
+  background:var(--white); border:1px solid var(--border);
+  border-radius:8px; box-shadow:0 8px 32px rgba(15,32,67,0.12);
+  min-width:240px; padding:8px 0; z-index:200;
+}
+.dropdown-item {
+  display:block; padding:10px 18px;
+  font-size:0.8rem; font-weight:500; color:var(--muted);
+  text-decoration:none; transition:all .15s;
+  border-left:2px solid transparent;
+}
+.dropdown-item:hover { color:var(--navy); background:var(--bg); }
+.dropdown-item.current { color:var(--navy); font-weight:600; border-left-color:var(--green); background:var(--gd); }
+.dropdown-arrow { font-size:0.6rem; margin-left:5px; opacity:.5; }
+.nav-cta {
+  margin-left:auto;
+  background:var(--navy); color:var(--white);
+  padding:9px 22px; border-radius:5px;
+  font-size:0.8rem; font-weight:700; text-decoration:none;
+  transition:background .18s;
+}
+.nav-cta:hover { background:#162d55; }
+
+/* ─── BREADCRUMB ─── */
+.breadcrumb {
+  background:var(--white); border-bottom:1px solid var(--border);
+  padding:10px 60px; display:flex; align-items:center; gap:6px;
+  font-size:0.72rem; color:var(--muted);
+}
+.bc-link { color:var(--muted); text-decoration:none; }
+.bc-link:hover { color:var(--navy); }
+.bc-sep { opacity:.4; }
+.bc-cur { color:var(--navy); font-weight:600; }
+
+/* ─── HERO ─── */
+.hero {
+  background:var(--navy);
+  padding:80px 60px 0;
+  display:grid; grid-template-columns:1fr 480px; gap:60px; align-items:end;
+  overflow:hidden; position:relative;
+}
+.hero::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 70% 0%, rgba(105,194,142,0.1) 0%, transparent 60%);
+  pointer-events:none;
+}
+.hero-tag {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Space Mono',monospace; font-size:0.56rem;
+  letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--green); margin-bottom:18px;
+}
+.hero-tag::before { content:''; width:20px; height:1px; background:var(--green); }
+.hero-eyebrow {
+  font-size:0.75rem; font-weight:600; color:rgba(255,255,255,0.45);
+  letter-spacing:0.06em; text-transform:uppercase; margin-bottom:10px;
+  display:flex; align-items:center; gap:8px;
+}
+.hero-eyebrow a { color:rgba(255,255,255,0.45); text-decoration:none; }
+.hero-eyebrow a:hover { color:rgba(255,255,255,0.7); }
+.hero-eyebrow span { opacity:.4; }
+h1 {
+  font-family:'DM Serif Display',serif;
+  font-size:3rem; color:#fff; line-height:1.1;
+  margin-bottom:22px;
+}
+h1 em { font-style:italic; color:var(--green); }
+.hero-sub {
+  font-size:1rem; color:rgba(255,255,255,0.62);
+  line-height:1.7; max-width:520px; margin-bottom:32px;
+}
+.hero-bullets { display:flex; flex-direction:column; gap:10px; margin-bottom:36px; }
+.hero-bullet {
+  display:flex; align-items:center; gap:10px;
+  font-size:0.88rem; color:rgba(255,255,255,0.78);
+}
+.hero-bullet::before {
+  content:''; width:7px; height:7px; border-radius:50%;
+  background:var(--green); flex-shrink:0;
+}
+.hero-ctas { display:flex; gap:12px; flex-wrap:wrap; }
+.btn-primary {
+  background:var(--green); color:var(--navy);
+  padding:13px 28px; border-radius:5px;
+  font-size:0.85rem; font-weight:800; text-decoration:none;
+  transition:background .18s; display:inline-block;
+}
+.btn-primary:hover { background:var(--green2); }
+.btn-outline {
+  border:1.5px solid rgba(255,255,255,0.25); color:#fff;
+  padding:12px 24px; border-radius:5px;
+  font-size:0.85rem; font-weight:600; text-decoration:none;
+  transition:all .18s; display:inline-block;
+}
+.btn-outline:hover { border-color:rgba(255,255,255,0.6); }
+
+/* Hero visual */
+.hero-visual {
+  position:relative; align-self:end;
+  height:420px; display:flex; align-items:flex-end; justify-content:center;
+}
+.hero-phone {
+  width:200px; background:var(--navy);
+  border:2px solid rgba(255,255,255,0.12);
+  border-radius:28px; overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  position:relative; z-index:2;
+}
+.phone-notch {
+  background:#000; height:28px;
+  display:flex; align-items:center; justify-content:center;
+}
+.phone-dot { width:8px; height:8px; border-radius:50%; background:#1a1a1a; }
+.phone-screen { padding:0; }
+.phone-ig-head {
+  background:var(--white); padding:6px 8px;
+  display:flex; align-items:center; gap:6px;
+}
+.phone-av {
+  width:22px; height:22px; border-radius:50%;
+  background:var(--navy); border:1.5px solid #e1306c;
+  display:flex; align-items:center; justify-content:center;
+  font-size:0.38rem; font-weight:800; color:#fff;
+}
+.phone-acct { font-size:0.52rem; font-weight:700; color:#1a1a1a; }
+.phone-spon { font-size:0.44rem; color:#888; }
+.phone-img {
+  aspect-ratio:1/1; background:var(--navy);
+  position:relative; overflow:hidden;
+  display:flex; align-items:flex-end;
+}
+.phone-img-bg {
+  position:absolute; inset:0;
+  background:linear-gradient(135deg, #0f2043 0%, #1a3a60 50%, #0d2a1e 100%);
+}
+.phone-img-content {
+  position:relative; z-index:2; padding:8px;
+  width:100%;
+}
+.phone-cap { background:var(--white); padding:5px 8px; }
+.phone-cap-txt { font-size:0.5rem; color:#1a1a1a; line-height:1.4; }
+.phone-more {
+  background:#f0f2f5; border-top:1px solid #e4e6eb;
+  padding:5px 8px; display:flex; justify-content:space-between;
+  align-items:center; font-size:0.5rem; font-weight:700; color:#1a1a1a;
+}
+
+/* Floating stats */
+.hero-stat {
+  position:absolute; background:var(--white);
+  border-radius:10px; padding:12px 16px;
+  box-shadow:0 8px 32px rgba(15,32,67,0.15);
+  min-width:140px;
+}
+.hs-1 { bottom:120px; right:-20px; }
+.hs-2 { top:60px; left:-30px; }
+.hs-val { font-family:'DM Serif Display',serif; font-size:1.4rem; color:var(--navy); line-height:1; margin-bottom:3px; }
+.hs-val span { color:var(--green); }
+.hs-lbl { font-size:0.62rem; color:var(--muted); line-height:1.4; }
+.hs-tag {
+  font-family:'Space Mono',monospace; font-size:0.44rem;
+  color:var(--green); letter-spacing:0.12em; text-transform:uppercase;
+  margin-bottom:4px;
+}
+
+/* ─── ONDERSCHEID BANNER ─── */
+.diff-banner {
+  background:var(--gd); border-top:1px solid var(--gb); border-bottom:1px solid var(--gb);
+  padding:20px 60px;
+  display:flex; align-items:center; gap:16px;
+}
+.diff-icon { font-size:1.2rem; }
+.diff-txt { font-size:0.82rem; color:var(--navy); line-height:1.5; }
+.diff-txt strong { font-weight:700; }
+.diff-sep { width:1px; height:32px; background:var(--gb); margin:0 8px; }
+.diff-pill {
+  margin-left:auto; white-space:nowrap;
+  background:var(--navy); color:var(--white);
+  font-size:0.7rem; font-weight:700; padding:7px 16px; border-radius:20px;
+  text-decoration:none;
+}
+
+/* ─── SECTION WRAPPER ─── */
+.section { padding:80px 60px; }
+.section.alt { background:var(--white); }
+.section.dark { background:var(--navy); }
+.section-tag {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Space Mono',monospace; font-size:0.54rem;
+  letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--green); margin-bottom:12px;
+}
+.section-tag::before { content:''; width:16px; height:1px; background:var(--green); }
+h2 {
+  font-family:'DM Serif Display',serif;
+  font-size:2rem; color:var(--navy); line-height:1.15;
+  margin-bottom:12px;
+}
+.section.dark h2 { color:#fff; }
+.section-intro { font-size:0.92rem; color:var(--muted); line-height:1.75; max-width:620px; }
+.section.dark .section-intro { color:rgba(255,255,255,0.55); }
+
+/* ─── DIENSTEN CARDS ─── */
+.diensten-grid {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+  margin-top:48px;
+}
+.dienst-card {
+  background:var(--white); border:1px solid var(--border);
+  border-radius:12px; overflow:hidden;
+  transition:box-shadow .2s, transform .2s;
+  cursor:pointer;
+}
+.dienst-card:hover { box-shadow:0 12px 40px rgba(15,32,67,0.1); transform:translateY(-3px); }
+.dienst-card-top {
+  padding:28px 24px 20px;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.dienst-icon {
+  width:44px; height:44px; border-radius:10px;
+  background:var(--gd); border:1px solid var(--gb);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.2rem; margin-bottom:16px;
+}
+.dienst-num {
+  position:absolute; top:20px; right:20px;
+  font-family:'Space Mono',monospace; font-size:0.52rem;
+  color:var(--border); letter-spacing:0.1em;
+}
+h3 {
+  font-family:'DM Serif Display',serif;
+  font-size:1.15rem; color:var(--navy); line-height:1.2;
+  margin-bottom:8px;
+}
+.dienst-sub { font-size:0.78rem; color:var(--muted); line-height:1.65; }
+.dienst-card-bottom { padding:18px 24px; background:var(--bg); }
+.dienst-roi {
+  display:flex; align-items:center; gap:8px;
+  margin-bottom:10px;
+}
+.roi-val { font-size:1rem; font-weight:800; color:var(--navy); }
+.roi-lbl { font-size:0.68rem; color:var(--muted); line-height:1.3; }
+.dienst-tags { display:flex; gap:5px; flex-wrap:wrap; }
+.dtag {
+  font-size:0.62rem; font-weight:500;
+  background:var(--navy10); border:1px solid var(--border);
+  color:var(--navy); padding:3px 9px; border-radius:3px;
+}
+.dtag.green { background:var(--gd); border-color:var(--gb); color:var(--green2); font-weight:700; }
+
+/* ─── VERGELIJKING ─── */
+.vergelijk {
+  display:grid; grid-template-columns:1fr 1fr; gap:0;
+  border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  margin-top:48px;
+}
+.verg-col { padding:36px 32px; }
+.verg-col.left { background:var(--white); border-right:1px solid var(--border); }
+.verg-col.right { background:var(--gd); }
+.verg-tag { font-family:'Space Mono',monospace; font-size:0.52rem; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:10px; }
+.verg-tag.navy { color:var(--navy); }
+.verg-tag.green { color:var(--green2); }
+.verg-title { font-family:'DM Serif Display',serif; font-size:1.25rem; color:var(--navy); margin-bottom:6px; }
+.verg-sub { font-size:0.78rem; color:var(--muted); line-height:1.6; margin-bottom:24px; }
+.verg-row {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:10px 0; border-bottom:1px solid var(--border);
+  font-size:0.8rem;
+}
+.verg-row:last-child { border:none; }
+.verg-lbl { color:var(--muted); }
+.verg-val { font-weight:600; color:var(--navy); text-align:right; }
+.verg-val.green { color:var(--green2); }
+
+/* ─── HOE HET WERKT ─── */
+.process { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:48px; position:relative; }
+.process::before {
+  content:''; position:absolute;
+  top:32px; left:10%; right:10%; height:1px;
+  background:var(--border); z-index:0;
+}
+.process-step { padding:0 16px; text-align:center; position:relative; z-index:1; }
+.step-circle {
+  width:64px; height:64px; border-radius:50%;
+  background:var(--white); border:1.5px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 18px; position:relative;
+  box-shadow:0 2px 12px rgba(15,32,67,0.06);
+}
+.step-circle.active {
+  background:var(--navy); border-color:var(--navy);
+}
+.step-circle.active .step-n { color:#fff; }
+.step-n { font-family:'DM Serif Display',serif; font-size:1.1rem; color:var(--navy); }
+.step-title { font-size:0.85rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+.step-desc { font-size:0.75rem; color:var(--muted); line-height:1.6; }
+.step-icon { font-size:1.1rem; }
+
+/* ─── PRIJZEN ─── */
+.prijzen-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:48px; }
+.prijs-card {
+  background:var(--white); border:1.5px solid var(--border);
+  border-radius:12px; padding:28px 24px; position:relative;
+}
+.prijs-card.featured {
+  border-color:var(--green); background:var(--navy);
+  box-shadow:0 12px 40px rgba(15,32,67,0.18);
+}
+.prijs-card.featured * { color:#fff !important; }
+.prijs-badge {
+  position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+  background:var(--green); color:var(--navy) !important;
+  font-size:0.62rem; font-weight:800; padding:4px 14px; border-radius:20px;
+  white-space:nowrap;
+}
+.prijs-name { font-size:0.7rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:10px; }
+.prijs-amount { font-family:'DM Serif Display',serif; font-size:2.2rem; color:var(--navy); line-height:1; margin-bottom:4px; }
+.prijs-period { font-size:0.72rem; color:var(--muted); margin-bottom:20px; }
+.prijs-divider { height:1px; background:var(--border); margin-bottom:18px; }
+.prijs-card.featured .prijs-divider { background:rgba(255,255,255,0.12); }
+.prijs-features { display:flex; flex-direction:column; gap:9px; margin-bottom:22px; }
+.pf { display:flex; align-items:flex-start; gap:8px; font-size:0.78rem; color:var(--text); line-height:1.4; }
+.pf::before { content:'✓'; color:var(--green); font-weight:700; flex-shrink:0; margin-top:1px; }
+.prijs-card.featured .pf::before { color:var(--green); }
+.prijs-cta {
+  display:block; text-align:center; padding:11px;
+  border-radius:5px; font-size:0.82rem; font-weight:700; text-decoration:none;
+  background:var(--bg); color:var(--navy); border:1.5px solid var(--border);
+  transition:all .18s;
+}
+.prijs-card.featured .prijs-cta { background:var(--green); color:var(--navy); border-color:var(--green); }
+.prijs-cta:hover { background:var(--navy); color:#fff; border-color:var(--navy); }
+.prijs-card.featured .prijs-cta:hover { background:var(--green2); border-color:var(--green2); }
+.prijs-note { font-size:0.68rem; color:var(--muted); text-align:center; margin-top:8px; }
+.prijs-card.featured .prijs-note { color:rgba(255,255,255,0.4); }
+
+/* ─── VOOR WIE ─── */
+.voorwie-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; margin-top:48px; }
+.vw-card {
+  border:1px solid var(--border); border-radius:10px; padding:22px 20px;
+  background:var(--white); transition:all .2s;
+}
+.vw-card:hover { border-color:var(--green); box-shadow:0 6px 24px rgba(15,32,67,0.07); }
+.vw-emoji { font-size:1.6rem; margin-bottom:12px; display:block; }
+.vw-title { font-size:0.9rem; font-weight:700; color:var(--navy); margin-bottom:6px; }
+.vw-desc { font-size:0.76rem; color:var(--muted); line-height:1.65; }
+
+/* ─── TESTIMONIAL ─── */
+.testimonial {
+  background:var(--navy); border-radius:12px;
+  padding:48px; margin-top:48px;
+  display:grid; grid-template-columns:auto 1fr; gap:40px; align-items:center;
+}
+.t-av { width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid var(--green); flex-shrink:0; }
+.t-quote-mark { font-family:'DM Serif Display',serif; font-size:3rem; color:var(--green); line-height:1; margin-bottom:10px; }
+.t-text { font-size:1rem; color:rgba(255,255,255,0.85); line-height:1.75; font-style:italic; margin-bottom:14px; }
+.t-name { font-size:0.82rem; font-weight:700; color:#fff; }
+.t-co { font-size:0.72rem; color:rgba(255,255,255,0.45); }
+.t-stats { display:flex; gap:32px; margin-top:20px; }
+.t-stat-val { font-family:'DM Serif Display',serif; font-size:1.6rem; color:var(--green); line-height:1; }
+.t-stat-lbl { font-size:0.65rem; color:rgba(255,255,255,0.45); margin-top:2px; }
+
+/* ─── QUIZ SECTIE ─── */
+.quiz-section {
+  background:var(--navy); padding:96px 60px 80px;
+  position:relative; overflow:hidden;
+}
+.quiz-section::before {
+  content:''; position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse at 20% 100%, rgba(105,194,142,0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 0%, rgba(105,194,142,0.09) 0%, transparent 50%);
+  pointer-events:none;
+}
+/* Subtle grid texture */
+.quiz-section::after {
+  content:''; position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+  background-size:48px 48px;
+  pointer-events:none;
+}
+.quiz-wrap {
+  max-width:800px; margin:0 auto; position:relative; z-index:1;
+}
+
+/* Intro */
+.quiz-intro { text-align:center; margin-bottom:56px; }
+.quiz-intro-eyebrow {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Space Mono',monospace; font-size:0.52rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--green); margin-bottom:18px;
+  background:rgba(105,194,142,0.08); border:1px solid rgba(105,194,142,0.2);
+  padding:6px 16px; border-radius:20px;
+}
+.quiz-intro-eyebrow::before { content:'◆'; font-size:0.4rem; }
+.quiz-intro h2 {
+  font-family:'DM Serif Display',serif; font-size:2.5rem; color:#fff;
+  margin-bottom:14px; line-height:1.1;
+}
+.quiz-intro h2 em { color:var(--green); font-style:italic; }
+.quiz-intro p { font-size:0.88rem; color:rgba(255,255,255,0.42); max-width:440px; margin:0 auto; line-height:1.75; }
+
+/* Step dots */
+.quiz-dots {
+  display:flex; align-items:center; justify-content:center;
+  gap:0; margin-bottom:40px;
+}
+.qdot {
+  width:28px; height:28px; border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.15);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Space Mono',monospace; font-size:0.56rem; color:rgba(255,255,255,0.25);
+  transition:all .35s cubic-bezier(.22,1,.36,1);
+  flex-shrink:0; position:relative; z-index:1; background:var(--navy);
+}
+.qdot.done {
+  border-color:var(--green); background:var(--green); color:var(--navy);
+  font-weight:800;
+}
+.qdot.active {
+  border-color:var(--green); color:var(--green); font-weight:700;
+  box-shadow:0 0 0 4px rgba(105,194,142,0.15);
+}
+.qdot-line {
+  flex:1; height:1px; background:rgba(255,255,255,0.1);
+  transition:background .35s;
+  max-width:80px; min-width:20px;
+}
+.qdot-line.done { background:rgba(105,194,142,0.45); }
+.qdot-label {
+  position:absolute; top:calc(100% + 7px); left:50%; transform:translateX(-50%);
+  font-size:0.48rem; font-family:'Space Mono',monospace; text-transform:uppercase;
+  letter-spacing:0.1em; white-space:nowrap;
+  color:rgba(255,255,255,0.25); transition:color .3s;
+}
+.qdot.active .qdot-label { color:var(--green); }
+.qdot.done .qdot-label { color:rgba(105,194,142,0.55); }
+
+/* Question card */
+.quiz-card {
+  display:none;
+  animation:qrise .38s cubic-bezier(.22,1,.36,1);
+}
+.quiz-card.active { display:block; }
+@keyframes qrise {
+  from { opacity:0; transform:translateY(18px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes qleave {
+  from { opacity:1; transform:translateY(0); }
+  to   { opacity:0; transform:translateY(-12px); }
+}
+
+.quiz-qnumber {
+  font-family:'Space Mono',monospace; font-size:0.5rem;
+  letter-spacing:0.18em; text-transform:uppercase;
+  color:rgba(255,255,255,0.22); margin-bottom:10px;
+}
+.quiz-q {
+  font-family:'DM Serif Display',serif;
+  font-size:1.65rem; color:#fff; line-height:1.2;
+  margin-bottom:6px;
+}
+.quiz-qsub {
+  font-size:0.76rem; color:rgba(255,255,255,0.32);
+  margin-bottom:32px; line-height:1.55; max-width:540px;
+}
+
+/* Answer options */
+.quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:36px; }
+.quiz-options.cols-1 { grid-template-columns:1fr; }
+.qopt {
+  background:rgba(255,255,255,0.03);
+  border:1.5px solid rgba(255,255,255,0.09);
+  border-radius:12px; padding:18px 20px;
+  cursor:pointer; transition:all .2s;
+  display:flex; align-items:flex-start; gap:14px;
+  text-align:left; position:relative; overflow:hidden;
+}
+.qopt::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, rgba(105,194,142,0.06) 0%, transparent 70%);
+  opacity:0; transition:opacity .2s;
+}
+.qopt:hover { border-color:rgba(105,194,142,0.3); transform:translateY(-1px); box-shadow:0 4px 20px rgba(0,0,0,0.2); }
+.qopt:hover::before { opacity:1; }
+.qopt.selected { border-color:var(--green); background:rgba(105,194,142,0.08); }
+.qopt.selected::before { opacity:1; }
+.qopt-icon {
+  width:40px; height:40px; border-radius:10px;
+  background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.15rem; flex-shrink:0; transition:all .2s; margin-top:1px;
+}
+.qopt.selected .qopt-icon { background:rgba(105,194,142,0.15); border-color:rgba(105,194,142,0.3); }
+.qopt-body { flex:1; }
+.qopt-main { font-size:0.86rem; font-weight:600; color:#fff; margin-bottom:4px; line-height:1.3; }
+.qopt-sub { font-size:0.7rem; color:rgba(255,255,255,0.36); line-height:1.45; }
+.qopt-radio {
+  width:18px; height:18px; border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.18);
+  flex-shrink:0; margin-top:3px; transition:all .2s;
+  display:flex; align-items:center; justify-content:center;
+}
+.qopt.selected .qopt-radio {
+  border-color:var(--green); background:var(--green);
+}
+.qopt.selected .qopt-radio::after {
+  content:''; width:6px; height:6px; border-radius:50%;
+  background:var(--navy); display:block;
+}
+
+/* Nav row */
+.quiz-nav {
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+}
+.qbtn-back {
+  background:none; border:1px solid rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.4); padding:10px 20px; border-radius:8px;
+  font-size:0.78rem; font-weight:600; cursor:pointer; font-family:inherit;
+  transition:all .18s; letter-spacing:0.01em;
+}
+.qbtn-back:hover { border-color:rgba(255,255,255,0.3); color:rgba(255,255,255,0.7); }
+.qbtn-back:disabled { opacity:0.15; cursor:default; pointer-events:none; }
+.quiz-nav-hint {
+  font-size:0.68rem; color:rgba(255,255,255,0.18);
+  font-family:'Space Mono',monospace;
+}
+.qbtn-next {
+  background:var(--green); color:var(--navy);
+  border:none; padding:12px 30px; border-radius:8px;
+  font-size:0.86rem; font-weight:800; cursor:pointer; font-family:inherit;
+  transition:all .2s; display:flex; align-items:center; gap:9px;
+  box-shadow:0 4px 16px rgba(105,194,142,0.25);
+}
+.qbtn-next:hover { background:var(--green2); transform:translateY(-1px); box-shadow:0 6px 20px rgba(105,194,142,0.35); }
+.qbtn-next:disabled { opacity:0.3; cursor:default; transform:none; box-shadow:none; }
+.qbtn-arrow { font-size:1rem; line-height:1; }
+
+/* ─── RESULT SCREEN ─── */
+.quiz-result {
+  display:none;
+  animation:qrise .45s cubic-bezier(.22,1,.36,1);
+}
+.quiz-result.active { display:block; }
+
+/* Result header */
+.result-top {
+  text-align:center; padding:0 0 48px;
+  border-bottom:1px solid rgba(255,255,255,0.07);
+  margin-bottom:36px;
+}
+.result-badge {
+  display:inline-flex; align-items:center; gap:8px;
+  background:rgba(105,194,142,0.1); border:1px solid rgba(105,194,142,0.25);
+  border-radius:24px; padding:7px 18px;
+  font-family:'Space Mono',monospace; font-size:0.52rem;
+  letter-spacing:0.14em; text-transform:uppercase; color:var(--green);
+  margin-bottom:20px;
+}
+.result-badge::before { content:'✦'; font-size:0.5rem; }
+.result-title { font-family:'DM Serif Display',serif; font-size:2.1rem; color:#fff; line-height:1.15; margin-bottom:12px; }
+.result-sub { font-size:0.84rem; color:rgba(255,255,255,0.42); max-width:500px; margin:0 auto; line-height:1.75; }
+
+/* Three insight cards */
+.result-cards {
+  display:grid; grid-template-columns:1.15fr 1fr 1fr; gap:14px;
+  margin-bottom:32px;
+}
+.rcard {
+  border-radius:14px; padding:24px 22px; position:relative; overflow:hidden;
+}
+.rcard.primary {
+  background:linear-gradient(135deg, rgba(105,194,142,0.14) 0%, rgba(105,194,142,0.06) 100%);
+  border:1.5px solid rgba(105,194,142,0.3);
+}
+.rcard.secondary {
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+}
+.rcard-eyebrow {
+  font-family:'Space Mono',monospace; font-size:0.46rem;
+  letter-spacing:0.16em; text-transform:uppercase;
+  color:rgba(255,255,255,0.3); margin-bottom:12px;
+  display:flex; align-items:center; gap:6px;
+}
+.rcard.primary .rcard-eyebrow { color:var(--green); }
+.rcard-eyebrow::before { content:''; width:10px; height:1px; background:currentColor; }
+.rcard-title { font-size:0.82rem; font-weight:600; color:rgba(255,255,255,0.65); margin-bottom:8px; }
+.rcard-val {
+  font-family:'DM Serif Display',serif; font-size:1.9rem; color:#fff;
+  line-height:1; margin-bottom:6px;
+}
+.rcard.primary .rcard-val { color:var(--green); font-size:2.2rem; }
+.rcard-price { font-size:0.72rem; color:rgba(255,255,255,0.35); margin-bottom:10px; }
+.rcard.primary .rcard-price { color:rgba(105,194,142,0.55); }
+.rcard-sub { font-size:0.68rem; color:rgba(255,255,255,0.3); line-height:1.55; }
+
+/* Pakket features pills */
+.rcard-features { display:flex; flex-direction:column; gap:6px; margin-top:12px; }
+.rf {
+  display:flex; align-items:center; gap:7px;
+  font-size:0.7rem; color:rgba(255,255,255,0.55); line-height:1.3;
+}
+.rf::before { content:'✓'; color:var(--green); font-size:0.65rem; font-weight:800; flex-shrink:0; }
+
+/* Ruben block */
+.result-ruben {
+  background:linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(105,194,142,0.04) 100%);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:14px; padding:28px 32px;
+  display:grid; grid-template-columns:auto 1fr auto; gap:24px; align-items:center;
+  position:relative; overflow:hidden;
+}
+.result-ruben::before {
+  content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+  background:var(--green); border-radius:3px 0 0 3px;
+}
+.rr-av { width:58px; height:58px; border-radius:50%; object-fit:cover; border:2px solid var(--green); flex-shrink:0; }
+.rr-name { font-size:0.9rem; font-weight:700; color:#fff; margin-bottom:5px; }
+.rr-sub { font-size:0.73rem; color:rgba(255,255,255,0.4); line-height:1.6; }
+.rr-actions { display:flex; flex-direction:column; gap:8px; flex-shrink:0; }
+.rr-btn-primary {
+  background:var(--green); color:var(--navy);
+  border:none; padding:11px 24px; border-radius:7px;
+  font-size:0.8rem; font-weight:800; cursor:pointer; font-family:inherit;
+  text-decoration:none; display:block; text-align:center; white-space:nowrap;
+  transition:all .18s; box-shadow:0 3px 12px rgba(105,194,142,0.3);
+}
+.rr-btn-primary:hover { background:var(--green2); transform:translateY(-1px); }
+.rr-btn-secondary {
+  background:none; border:1px solid rgba(255,255,255,0.15);
+  color:rgba(255,255,255,0.55); padding:10px 24px; border-radius:7px;
+  font-size:0.76rem; font-weight:600; cursor:pointer; font-family:inherit;
+  text-decoration:none; display:block; text-align:center; white-space:nowrap;
+  transition:all .18s;
+}
+.rr-btn-secondary:hover { border-color:rgba(255,255,255,0.35); color:#fff; }
+
+/* Disclaimer + restart */
+.result-footer {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:20px; padding-top:16px;
+  border-top:1px solid rgba(255,255,255,0.05);
+}
+.result-disclaimer { font-size:0.64rem; color:rgba(255,255,255,0.2); line-height:1.5; max-width:400px; }
+.restart-btn {
+  background:none; border:none; color:rgba(255,255,255,0.22);
+  font-size:0.7rem; cursor:pointer; font-family:inherit;
+  display:flex; align-items:center; gap:5px;
+  transition:color .18s; white-space:nowrap; flex-shrink:0;
+}
+.restart-btn:hover { color:rgba(255,255,255,0.5); }
+
+/* ─── FOOTER NAV HINT ─── */
+.page-nav {
+  background:var(--white); border-top:1px solid var(--border);
+  padding:24px 60px; display:flex; align-items:center; justify-content:space-between;
+}
+.pnav-prev, .pnav-next {
+  display:flex; align-items:center; gap:10px; text-decoration:none;
+  padding:10px 18px; border-radius:6px; border:1px solid var(--border);
+  transition:all .18s;
+}
+.pnav-prev:hover, .pnav-next:hover { border-color:var(--green); background:var(--gd); }
+.pnav-dir { font-size:0.62rem; color:var(--muted); font-family:'Space Mono',monospace; letter-spacing:0.1em; text-transform:uppercase; }
+.pnav-title { font-size:0.82rem; font-weight:600; color:var(--navy); }
+
+/* ─── WIREFRAME ANNOTATION ─── */
+.wf-note {
+  display:inline-flex; align-items:center; gap:6px;
+  background:#FFF8E7; border:1px solid #F5CC5A;
+  border-radius:4px; padding:5px 12px;
+  font-family:'Space Mono',monospace; font-size:0.56rem;
+  color:#8B6914; letter-spacing:0.06em; margin-bottom:24px;
+}
+
+/* ─── FAQ ─── */
+.faq { max-width:720px; margin:48px auto 0; }
+.faq-item { border-bottom:1px solid var(--border); }
+.faq-q {
+  padding:18px 0; display:flex; justify-content:space-between; align-items:center;
+  font-size:0.88rem; font-weight:600; color:var(--navy); cursor:pointer;
+}
+.faq-q:hover { color:var(--green2); }
+.faq-icon { color:var(--green); font-size:1.1rem; flex-shrink:0; }
+.faq-a { padding:0 0 16px; font-size:0.8rem; color:var(--muted); line-height:1.7; }
+
+/* ─── AD MOCKUP ─── */
+.ad-preview {
+  width:260px; background:#fff; border-radius:8px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.15); overflow:hidden;
+  font-family:-apple-system,sans-serif; flex-shrink:0;
+}
+.ap-bar { background:#1877f2; padding:6px 8px; display:flex; align-items:center; }
+.ap-f { color:#fff; font-weight:900; font-size:0.85rem; letter-spacing:-1px; }
+.ap-hd { padding:7px 9px; display:flex; align-items:center; gap:6px; background:#fff; }
+.ap-av { width:26px; height:26px; border-radius:50%; background:var(--navy); display:flex; align-items:center; justify-content:center; font-size:0.44rem; font-weight:800; color:#fff; flex-shrink:0; }
+.ap-nm { font-size:0.6rem; font-weight:700; color:#1a1a1a; }
+.ap-sp { font-size:0.5rem; color:#888; }
+.ap-img {
+  aspect-ratio:1.91/1; background:var(--navy); position:relative; overflow:hidden;
+  display:flex; align-items:flex-end; justify-content:flex-start; padding:9px;
+}
+.ap-img-bg { position:absolute; inset:0; background:linear-gradient(135deg,#0f2043 0%,#1a3a5c 60%,#0d2a1e 100%); }
+.ap-img-veil { position:absolute; bottom:0; left:0; right:0; height:55%; background:linear-gradient(0deg,rgba(6,10,24,.85),transparent); }
+.ap-img-content { position:relative; z-index:2; }
+.ap-tx { padding:5px 9px 6px; font-size:0.58rem; color:#1a1a1a; line-height:1.45; background:#fff; }
+.ap-lk { background:#f0f2f5; border-top:1px solid #e4e6eb; padding:6px 9px; display:flex; align-items:center; justify-content:space-between; }
+.ap-ld { font-size:0.44rem; color:#888; text-transform:uppercase; }
+.ap-lt { font-size:0.56rem; font-weight:700; color:#1a1a1a; margin-top:1px; }
+.ap-bt { background:var(--green); color:var(--navy); border:none; border-radius:4px; padding:5px 10px; font-size:0.56rem; font-weight:700; cursor:pointer; }
+
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+  WEBFLOW: Vervang dit blok door jouw Webflow Navbar component
+  Sleep een "Navbar" element vanuit het Insert panel
+  ════════════════════════════════════════════════ -->
+<!-- [WEBFLOW NAVBAR HIER] -->
+
+<!-- ─── BREADCRUMB ─── -->
+<div class="breadcrumb">
+  <a class="bc-link" href="#">Home</a>
+  <span class="bc-sep">›</span>
+  <a class="bc-link" href="#">Voor Makelaars</a>
+  <span class="bc-sep">›</span>
+  <span class="bc-cur">Makelaarsdiensten promoten</span>
+</div>
+
+<!-- ════ WEBFLOW SECTION: Hero ════ -->
+<section class="hero">
+  <div class="hero-content" style="padding-bottom:72px;">
+    <div class="wf-note">📐 Wireframe — Real Adstate · Subpagina Makelaarsdiensten</div>
+    <div class="hero-eyebrow">
+      <a href="#">Voor Makelaars</a>
+      <span>›</span>
+      Makelaarsdiensten promoten
+    </div>
+    <h1>Meer verkoopopdrachten.<br>Meer <em>aanvragen.</em><br>Van jouw regio.</h1>
+    <p class="hero-sub">Jij bent de makelaar die mensen vertrouwen als ze willen kopen of verkopen. Wij zorgen dat ze aan jóu denken — met slimme Meta Ads campagnes gericht op huiseigenaren en kopers in jouw werkgebied.</p>
+    <div class="hero-bullets">
+      <div class="hero-bullet">Lopende campagnes voor verkoopopdrachten, aankoopbegeleiding en taxaties</div>
+      <div class="hero-bullet">Volledig in jouw huisstijl — jouw naam en logo centraal</div>
+      <div class="hero-bullet">Maandelijks opzegbaar — geen langlopende contracten</div>
+    </div>
+    <div class="hero-ctas">
+      <a href="#gesprek" class="btn-primary">Plan een gratis strategiegesprek →</a>
+      <a href="#diensten" class="btn-outline">Bekijk de diensten</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <!-- Ad mockup -->
+    <div class="ad-preview" style="margin-bottom:32px;">
+      <div class="ap-bar"><div class="ap-f">f</div></div>
+      <div class="ap-hd">
+        <div class="ap-av">CS</div>
+        <div>
+          <div class="ap-nm">Cees Steur Makelaars</div>
+          <div class="ap-sp">Gesponsord · 🌐</div>
+        </div>
+      </div>
+      <div class="ap-img">
+        <div class="ap-img-bg"></div>
+        <div class="ap-img-veil"></div>
+        <div class="ap-img-content">
+          <div style="font-family:'Space Mono',monospace;font-size:0.36rem;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:3px;">Halfweg · Haarlem · Amsterdam</div>
+          <div style="font-family:'DM Serif Display',serif;font-size:0.72rem;color:#fff;line-height:1.2;">Wil je jouw woning<br>verkopen? Wij helpen.</div>
+        </div>
+      </div>
+      <div class="ap-tx"><strong>Overweegt u te verkopen?</strong> Ontdek wat uw woning waard is met een gratis waardebepaling — binnen 48 uur.</div>
+      <div class="ap-lk">
+        <div><div class="ap-ld">ceessteurmakelaars.nl</div><div class="ap-lt">Gratis waardebepaling aanvragen</div></div>
+        <button class="ap-bt">Aanvragen</button>
+      </div>
+    </div>
+    <!-- Floating stats -->
+    <div class="hero-stat hs-1">
+      <div class="hs-tag">Gem. resultaat</div>
+      <div class="hs-val">3–8×<span> ROI</span></div>
+      <div class="hs-lbl">op verkoopopdracht<br>campagnes</div>
+    </div>
+    <div class="hero-stat hs-2">
+      <div class="hs-tag">Campagne live</div>
+      <div class="hs-val">48<span>u</span></div>
+      <div class="hs-lbl">na eerste gesprek<br>en aanlevering</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ONDERSCHEID BANNER ─── -->
+<div class="diff-banner">
+  <div class="diff-icon">↔️</div>
+  <div class="diff-txt">
+    <strong>Anders dan woningaanbod promoten:</strong> hier investeer jij als makelaar zelf in jouw eigen zichtbaarheid — en genereer je nieuwe opdrachten, niet alleen meer bezichtigingen.
+  </div>
+  <div class="diff-sep"></div>
+  <div class="diff-txt" style="font-size:0.78rem;">
+    Woningaanbod promoten? <a href="#" style="color:var(--green2);font-weight:600;">Bekijk die pagina →</a>
+  </div>
+  <a href="#gesprek" class="diff-pill">Start met een gesprek</a>
+</div>
+
+<!-- ════ WEBFLOW SECTION: Voor wie ════ -->
+<section class="section alt" id="voorwie">
+  <div class="section-tag">Voor wie</div>
+  <h2>Geschikt voor elk type makelaarskantoor</h2>
+  <p class="section-intro">Of je nu solo werkt of een kantoor met meerdere collega's hebt — deze campagnes zijn schaalbaar naar jouw regio, doelgroep en ambitie.</p>
+  <div class="voorwie-grid">
+    <div class="vw-card">
+      <span class="vw-emoji">🏠</span>
+      <div class="vw-title">Zelfstandig makelaar (NVM/VBO)</div>
+      <div class="vw-desc">Je wil meer verkoopopdrachten in jouw gemeente of wijk. Consistent zichtbaar zijn bij huiseigenaren die overwegen te verkopen — ook als ze nog niet actief zoeken.</div>
+    </div>
+    <div class="vw-card">
+      <span class="vw-emoji">🏢</span>
+      <div class="vw-title">Makelaarskantoor (2–10 medewerkers)</div>
+      <div class="vw-desc">Je wil je naam vestigen als het vaste makelaarskantoor in de regio. Branding-campagnes die consistente naamsbekendheid opbouwen naast de directe leadgeneratie.</div>
+    </div>
+    <div class="vw-card">
+      <span class="vw-emoji">📍</span>
+      <div class="vw-title">Nieuw kantoor of nieuwe vestiging</div>
+      <div class="vw-desc">Je opent een nieuw kantoor of breidt uit naar een nieuwe regio. Snelle zichtbaarheid opbouwen bij een doelgroep die jou nog niet kent.</div>
+    </div>
+    <div class="vw-card">
+      <span class="vw-emoji">🔑</span>
+      <div class="vw-title">Aankoopmakelaar</div>
+      <div class="vw-desc">Steeds meer kopers zoeken begeleiding. Specifieke campagnes gericht op mensen die een woning willen kopen maar nog geen makelaar hebben ingeschakeld.</div>
+    </div>
+    <div class="vw-card">
+      <span class="vw-emoji">📊</span>
+      <div class="vw-title">Makelaar die taxaties wil genereren</div>
+      <div class="vw-desc">Taxaties zijn een laagdrempelige instap voor huiseigenaren — en een directe aanleiding voor een verkoopgesprek. Ideaal als funnel-top.</div>
+    </div>
+    <div class="vw-card">
+      <span class="vw-emoji">🚀</span>
+      <div class="vw-title">Groeier die wil opschalen</div>
+      <div class="vw-desc">Je hebt al voldoende klanten maar wil structureel meer opdrachten binnenhalen zonder afhankelijk te zijn van mond-tot-mondreclame of Funda-zichtbaarheid.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ WEBFLOW SECTION: Diensten ════ -->
+<section class="section" id="diensten">
+  <div class="section-tag">Het aanbod</div>
+  <h2>Drie campagnes. Één doel:<br>meer opdrachten.</h2>
+  <p class="section-intro">We bieden drie gespecialiseerde campagnetypen aan — elk gericht op een andere fase van de relatie tussen makelaar en potentiële klant.</p>
+
+  <div class="diensten-grid">
+
+    <!-- Dienst 1 -->
+    <div class="dienst-card">
+      <div class="dienst-card-top">
+        <div class="dienst-num">01</div>
+        <div class="dienst-icon">🏡</div>
+        <h3>Verkoopopdrachten campagne</h3>
+        <p class="dienst-sub">Gerichte advertenties aan huiseigenaren in jouw werkgebied die overwegen te verkopen. De haak is een gratis waardebepaling of kennismakingsgesprek — laagdrempelig voor hen, hoogwaardig voor jou.</p>
+      </div>
+      <div class="dienst-card-bottom">
+        <div class="dienst-roi">
+          <div class="roi-val">€3.000–10.000</div>
+          <div class="roi-lbl">waarde van één<br>gewonnen opdracht</div>
+        </div>
+        <div class="dienst-tags">
+          <span class="dtag">Facebook & Instagram</span>
+          <span class="dtag">Postcode targeting</span>
+          <span class="dtag green">Meest populair</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dienst 2 -->
+    <div class="dienst-card">
+      <div class="dienst-card-top">
+        <div class="dienst-num">02</div>
+        <div class="dienst-icon">📣</div>
+        <h3>Regionale naamsbekendheid</h3>
+        <p class="dienst-sub">Consistente merkzichtbaarheid in een straal rondom jouw kantoor. Geen directe conversie — maar jouw naam en gezicht worden de vanzelfsprekende keuze als mensen in de markt komen. Branding als fundament.</p>
+      </div>
+      <div class="dienst-card-bottom">
+        <div class="dienst-roi">
+          <div class="roi-val">Lange termijn</div>
+          <div class="roi-lbl">top-of-mind bij<br>potentiële verkopers</div>
+        </div>
+        <div class="dienst-tags">
+          <span class="dtag">Facebook & Instagram</span>
+          <span class="dtag">Straal targeting</span>
+          <span class="dtag">Video ads</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dienst 3 -->
+    <div class="dienst-card">
+      <div class="dienst-card-top">
+        <div class="dienst-num">03</div>
+        <div class="dienst-icon">🎯</div>
+        <h3>Specifieke dienst campagne</h3>
+        <p class="dienst-sub">Aankoopbegeleiding, taxaties, of een nieuwe vestiging — maatwerk voor een specifieke dienst die jij wil promoten. Wij schrijven de copy, bouwen de campagne en targeten de juiste doelgroep.</p>
+      </div>
+      <div class="dienst-card-bottom">
+        <div class="dienst-roi">
+          <div class="roi-val">Maatwerk</div>
+          <div class="roi-lbl">afgestemd op jouw<br>dienst en regio</div>
+        </div>
+        <div class="dienst-tags">
+          <span class="dtag">Facebook & Instagram</span>
+          <span class="dtag">Op maat</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ WEBFLOW SECTION: Vergelijking ════ -->
+<section class="section alt">
+  <div class="section-tag">Vergelijking</div>
+  <h2>Woningaanbod vs. makelaarsdiensten</h2>
+  <p class="section-intro">Beide producten vullen elkaar aan. Dit zijn de belangrijkste verschillen — zodat je weet welke het beste past bij jouw situatie.</p>
+
+  <div class="vergelijk">
+    <div class="verg-col left">
+      <div class="verg-tag navy">Woningaanbod promoten</div>
+      <div class="verg-title">Per woning, korte looptijd</div>
+      <div class="verg-sub">Jij verkoopt het door aan de woningverkoper. Die betaalt. Jij ontvangt de leads en bezichtigingen.</div>
+      <div class="verg-row"><span class="verg-lbl">Wie betaalt</span><span class="verg-val">Woningverkoper</span></div>
+      <div class="verg-row"><span class="verg-lbl">Looptijd</span><span class="verg-val">Per woning (~4–8 weken)</span></div>
+      <div class="verg-row"><span class="verg-lbl">Campagnedoel</span><span class="verg-val">Meer bezichtigingen</span></div>
+      <div class="verg-row"><span class="verg-lbl">CTA</span><span class="verg-val">Funda-link insturen</span></div>
+      <div class="verg-row"><span class="verg-lbl">Prijs</span><span class="verg-val">€149–299 per woning</span></div>
+      <div style="margin-top:20px;">
+        <a href="#" style="font-size:0.78rem;font-weight:600;color:var(--green2);text-decoration:none;">Bekijk woningaanbod promoten →</a>
+      </div>
+    </div>
+    <div class="verg-col right">
+      <div class="verg-tag green">Makelaarsdiensten promoten</div>
+      <div class="verg-title">Lopend, structureel</div>
+      <div class="verg-sub">Jij investeert in je eigen zichtbaarheid als makelaarskantoor en genereert nieuwe opdrachten.</div>
+      <div class="verg-row" style="border-color:var(--gb);"><span class="verg-lbl">Wie betaalt</span><span class="verg-val green">Makelaar zelf</span></div>
+      <div class="verg-row" style="border-color:var(--gb);"><span class="verg-lbl">Looptijd</span><span class="verg-val green">Maandelijks (min. 3 mnd)</span></div>
+      <div class="verg-row" style="border-color:var(--gb);"><span class="verg-lbl">Campagnedoel</span><span class="verg-val green">Nieuwe opdrachten</span></div>
+      <div class="verg-row" style="border-color:var(--gb);"><span class="verg-lbl">CTA</span><span class="verg-val green">Gratis strategiegesprek</span></div>
+      <div class="verg-row" style="border-color:var(--gb);"><span class="verg-lbl">Prijs</span><span class="verg-val green">€299–499/mnd</span></div>
+      <div style="margin-top:20px;">
+        <a href="#gesprek" class="btn-primary" style="font-size:0.78rem;padding:9px 18px;">Plan een gesprek →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ WEBFLOW SECTION: Werkwijze ════ -->
+<section class="section" id="werkwijze">
+  <div class="section-tag">Werkwijze</div>
+  <h2>Van gesprek tot campagne live</h2>
+  <p class="section-intro">Anders dan bij woningaanbod heeft een diensten-campagne een korte intake nodig. Wij leren jouw kantoor, regio en doelgroep kennen — zodat de campagne echt aansluit.</p>
+
+  <div class="process">
+    <div class="process-step">
+      <div class="step-circle active">
+        <span class="step-n">1</span>
+      </div>
+      <div class="step-title">Gratis strategiegesprek</div>
+      <div class="step-desc">20 minuten. We bespreken jouw kantoor, werkgebied, doelstelling en welke dienst je wil promoten.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-circle">
+        <span class="step-icon">📋</span>
+      </div>
+      <div class="step-title">Voorstel & aanlevering</div>
+      <div class="step-desc">Wij sturen een concreet campagnevoorstel. Jij levert logo, huisstijl en eventueel foto's aan. Eenmalig.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-circle">
+        <span class="step-icon">⚙️</span>
+      </div>
+      <div class="step-title">Campagne live binnen 48u</div>
+      <div class="step-desc">Wij bouwen de advertenties, stellen targeting in en zetten de campagne live. Volledig in jouw huisstijl.</div>
+    </div>
+    <div class="process-step">
+      <div class="step-circle">
+        <span class="step-icon">📈</span>
+      </div>
+      <div class="step-title">Maandelijkse rapportage</div>
+      <div class="step-desc">Je ontvangt maandelijks een overzicht van bereik, leads en resultaten. We optimaliseren doorlopend.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ WEBFLOW SECTION: Prijzen ════ -->
+<section class="section alt" id="prijzen">
+  <div class="section-tag">Prijzen</div>
+  <h2>Transparante maandpakketten</h2>
+  <p class="section-intro">Geen verrassingen. Maandelijks opzegbaar na de minimale looptijd van 3 maanden. Alle pakketten inclusief campagnebeheer en rapportage.</p>
+
+  <div class="prijzen-grid">
+
+    <div class="prijs-card">
+      <div class="prijs-name">Starter</div>
+      <div class="prijs-amount">€299</div>
+      <div class="prijs-period">per maand · min. 3 maanden</div>
+      <div class="prijs-divider"></div>
+      <div class="prijs-features">
+        <div class="pf">1 campagnetype naar keuze</div>
+        <div class="pf">Facebook & Instagram plaatsingen</div>
+        <div class="pf">Volledig in jouw huisstijl</div>
+        <div class="pf">Maandelijkse rapportage</div>
+        <div class="pf">Advertentiebudget niet inbegrepen</div>
+      </div>
+      <a href="#gesprek" class="prijs-cta">Plan een gesprek</a>
+      <div class="prijs-note">Ideaal voor zelfstandig makelaar</div>
+    </div>
+
+    <div class="prijs-card featured">
+      <div class="prijs-badge">Meest gekozen</div>
+      <div class="prijs-name">Groei</div>
+      <div class="prijs-amount">€399</div>
+      <div class="prijs-period">per maand · min. 3 maanden</div>
+      <div class="prijs-divider"></div>
+      <div class="prijs-features">
+        <div class="pf">2 campagnetypen gecombineerd</div>
+        <div class="pf">A/B testing op advertentievarianten</div>
+        <div class="pf">Retargeting campagne inbegrepen</div>
+        <div class="pf">Maandelijkse rapportage + call</div>
+        <div class="pf">Advertentiebudget niet inbegrepen</div>
+      </div>
+      <a href="#gesprek" class="prijs-cta">Plan een gesprek</a>
+      <div class="prijs-note">Geschikt voor groeiend kantoor</div>
+    </div>
+
+    <div class="prijs-card">
+      <div class="prijs-name">Premium</div>
+      <div class="prijs-amount">€499</div>
+      <div class="prijs-period">per maand · min. 3 maanden</div>
+      <div class="prijs-divider"></div>
+      <div class="prijs-features">
+        <div class="pf">Alle 3 campagnetypen</div>
+        <div class="pf">UGC video advertenties (1×/kwartaal)</div>
+        <div class="pf">Volledige funnel incl. landingspagina</div>
+        <div class="pf">Wekelijkse rapportage</div>
+        <div class="pf">Advertentiebudget niet inbegrepen</div>
+      </div>
+      <a href="#gesprek" class="prijs-cta">Plan een gesprek</a>
+      <div class="prijs-note">Voor kantoor met groeistrategie</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════ WEBFLOW SECTION: Testimonial ════ -->
+<section class="section">
+  <div class="section-tag">Resultaten</div>
+  <h2>Wat makelaars zeggen</h2>
+
+  <div class="testimonial">
+    <div>
+      <img class="t-av" src="https://realadstate.nl/wp-content/uploads/2025/09/ceessteur.png" onerror="this.style.display='none'" alt="Cees Steur">
+    </div>
+    <div>
+      <div class="t-quote-mark">"</div>
+      <div class="t-text">De samenwerking was heel prettig. Alles werd professioneel opgezet, in onze stijl, en we zagen het aantal bezichtigingen snel oplopen. Real Adstate ontzorgt volledig — wij hoeven alleen te reageren op de leads die binnenkomen.</div>
+      <div class="t-name">Cees Steur</div>
+      <div class="t-co">Cees Steur Makelaars — Halfweg</div>
+      <div class="t-stats">
+        <div>
+          <div class="t-stat-val">+43%</div>
+          <div class="t-stat-lbl">meer bezichtigingen</div>
+        </div>
+        <div>
+          <div class="t-stat-val">€0</div>
+          <div class="t-stat-lbl">extra kosten makelaar</div>
+        </div>
+        <div>
+          <div class="t-stat-val">10d</div>
+          <div class="t-stat-lbl">villa verkocht</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ WEBFLOW SECTION: FAQ ════ -->
+<section class="section alt">
+  <div class="section-tag">Vragen</div>
+  <h2>Veelgestelde vragen</h2>
+
+  <div class="faq">
+    <div class="faq-item">
+      <div class="faq-q">Wat is het verschil met woningaanbod promoten? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Bij woningaanbod promoten betaalt de woningverkoper en draait de campagne rondom één specifieke woning. Bij makelaarsdiensten promoten investeer jij als makelaar in je eigen zichtbaarheid als kantoor — gericht op het aantrekken van nieuwe opdrachten, niet bezichtigingen.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Moet ik zelf advertentiebudget meesturen? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Ja. De maandelijkse pakketten dekken het campagnebeheer en de advertentie-opmaak. Het advertentiebudget dat rechtstreeks naar Meta gaat, is apart. Wij adviseren €15–30/dag voor een effectieve diensten-campagne in een gemiddelde regio.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Kan ik woningaanbod én makelaarsdiensten combineren? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Absoluut — en dat is zelfs de sterkste combinatie. Elke woning die jij via Real Adstate promoot versterkt ook je naamsbekendheid als makelaar. Klanten die al woningaanbod via ons promoten krijgen korting op een diensten-abonnement.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Hoe snel zie ik resultaten? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Verkoopopdrachten-campagnes leveren doorgaans al binnen de eerste 4–6 weken leads op. Naamsbekendheids-campagnes zijn langere termijn — reken op 2–3 maanden voordat de effect merkbaar is in inbound verzoeken.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Wat moet ik aanleveren? <span class="faq-icon">+</span></div>
+      <div class="faq-a">Je logo, huisstijlkleuren en eventueel een portretfoto voor de advertenties. Eenmalig. Wij schrijven de copy, bouwen de advertenties en stellen de targeting in. Geen briefings, geen lange checklists.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════
+  WEBFLOW EMBED: Quiz sectie
+  1. Sleep een "Embed" element naar deze positie
+  2. Plak de volledige inhoud van embed-quiz.html
+  3. Stel de sectie-achtergrond in op: #0F2043
+  ════════════════════════════════════════════════ -->
+<section id="check" style="background:#0F2043; padding:80px 60px;">
+  <!-- [WEBFLOW EMBED: embed-quiz.html] -->
+</section>
+
+<!-- ─── PAGE NAV ─── -->
+<div class="page-nav">
+  <a href="#" class="pnav-prev">
+    <div>
+      <div class="pnav-dir">← Vorige pagina</div>
+      <div class="pnav-title">Woningaanbod promoten</div>
+    </div>
+  </a>
+  <a href="#" class="pnav-next">
+    <div style="text-align:right;">
+      <div class="pnav-dir">Volgende pagina →</div>
+      <div class="pnav-title">Voor Vastgoedontwikkelaars</div>
+    </div>
+  </a>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ─── STATE ───────────────────────────────────────────────
+const answers = {};
+
+// ─── DOTS UPDATE ─────────────────────────────────────────
+function updateDots(step) {
+  for (let i = 1; i <= 5; i++) {
+    const dot  = document.getElementById('dot' + i);
+    const line = document.getElementById('line' + i);
+    dot.classList.remove('active','done');
+    if (i < step)       { dot.classList.add('done'); dot.textContent = ''; dot.innerHTML = '✓<span class="qdot-label">' + dot.querySelector('.qdot-label')?.textContent + '</span>'; }
+    else if (i === step) { dot.classList.add('active'); }
+    if (line) line.classList.toggle('done', i < step);
+  }
+}
+
+// ─── SELECT OPTION ───────────────────────────────────────
+function selectOpt(el) {
+  const q = el.dataset.q;
+  document.querySelectorAll(`.qopt[data-q="${q}"]`).forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[q] = el.dataset.val;
+  document.getElementById('next' + q).disabled = false;
+  // Show hint as "selected"
+  const hint = el.closest('.quiz-card').querySelector('.quiz-nav-hint');
+  if (hint) hint.textContent = '';
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────
+function nextStep(current) {
+  document.getElementById('q' + current).classList.remove('active');
+  const next = current + 1;
+  document.getElementById('q' + next).classList.add('active');
+  updateDots(next);
+  document.getElementById('check').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function prevStep(current) {
+  document.getElementById('q' + current).classList.remove('active');
+  const prev = current - 1;
+  document.getElementById('q' + prev).classList.add('active');
+  updateDots(prev);
+  document.getElementById('check').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ─── SCORING LOGIC ───────────────────────────────────────
+function calcResult() {
+  const doel   = answers['1'] || 'opdrachten';
+  const grootte= answers['2'] || 'solo';
+  const gebied = answers['3'] || 'gemeente';
+  const ops    = answers['4'] || 'middel';
+  const budget = answers['5'] || 'klein';
+
+  // Pakket scoring
+  let score = 0;
+  if (grootte === 'middel' || grootte === 'groot') score += 2;
+  if (grootte === 'klein') score += 1;
+  if (gebied  === 'regio' || gebied === 'provincie') score += 2;
+  if (doel    === 'alles') score += 2;
+  if (ops     === 'hoog'  || ops === 'top') score += 1;
+  if (budget  === 'groot') score += 2;
+  if (budget  === 'middel') score += 1;
+
+  let pakket = 'Starter';
+  if (score >= 4) pakket = 'Groei';
+  if (score >= 7) pakket = 'Premium';
+
+  // Campagnetype
+  const campagnes = {
+    opdrachten:      { type: 'Verkoopopdrachten campagne', icon: '🏡', sub: 'Gericht op huiseigenaren die overwegen te verkopen. Haak: gratis waardebepaling.' },
+    naamsbekendheid: { type: 'Regionale naamsbekendheid', icon: '📣', sub: 'Consistente zichtbaarheid in jouw werkgebied. Jij wordt dé bekende makelaar.' },
+    dienst:          { type: 'Specifieke dienst campagne', icon: '🎯', sub: 'Gericht op jouw specifieke dienst — aankoopbegeleiding, taxaties of vestiging.' },
+    alles:           { type: 'Gecombineerde campagne', icon: '🚀', sub: 'Meerdere campagnetypen gecombineerd voor brede en duurzame groei.' }
+  };
+  const camp = campagnes[doel] || campagnes.opdrachten;
+
+  // Budget advies
+  let budgetAdvies = '€200–350/mnd';
+  let budgetSub    = 'Lokaal werkgebied. Voldoende voor zichtbare resultaten in jouw gemeente.';
+  if (gebied === 'regio') {
+    budgetAdvies = '€300–500/mnd';
+    budgetSub    = 'Meerdere gemeenten. Voldoende bereik voor merkbare leadgeneratie.';
+  }
+  if (gebied === 'provincie' || budget === 'groot') {
+    budgetAdvies = '€450–700/mnd';
+    budgetSub    = 'Breed werkgebied. Maximale zichtbaarheid, meerdere campagnetypen actief.';
+  }
+  if (budget === 'geen') {
+    budgetAdvies = '€150–200/mnd';
+    budgetSub    = 'Prima startbudget. Genoeg om te testen en bij te sturen.';
+  }
+  if (gebied === 'wijk' && budget !== 'groot') {
+    budgetAdvies = '€150–250/mnd';
+    budgetSub    = 'Lokale wijk. Kleine radius, hoge relevantie, lager budget nodig.';
+  }
+
+  // Pakket details + features
+  const pakketten = {
+    Starter: {
+      prijs: '€299',
+      sub: 'Ideaal voor solo makelaar of eerste campagne.',
+      features: ['1 campagnetype naar keuze', 'Facebook & Instagram', 'In jouw huisstijl', 'Maandelijkse rapportage']
+    },
+    Groei: {
+      prijs: '€399',
+      sub: 'Sterkste groei-accelerator voor groeiend kantoor.',
+      features: ['2 campagnetypen gecombineerd', 'A/B testing inbegrepen', 'Retargeting campagne', 'Rapportage + maandcall']
+    },
+    Premium: {
+      prijs: '€499',
+      sub: 'Voor serieuze groeistrategie op meerdere fronten.',
+      features: ['Alle 3 campagnetypen', 'UGC video ads (1×/kwartaal)', 'Volledige funnel', 'Wekelijkse rapportage']
+    }
+  };
+
+  const titles = {
+    opdrachten:      ops === 'laag' ? 'Jij hebt directe groei nodig — en dat is haalbaar.' : 'Jij bent klaar om meer opdrachten te genereren.',
+    naamsbekendheid: 'Jij bouwt aan een merk. Wij maken je zichtbaar in jouw regio.',
+    dienst:          'Jouw dienst verdient meer zichtbaarheid.',
+    alles:           'Jij wil opschalen. Wij hebben het pakket dat daarbij past.'
+  };
+  const subs = {
+    opdrachten:      `Met een ${camp.type.toLowerCase()} in jouw werkgebied bereik je huiseigenaren vóórdat ze een makelaar bellen. Wij zorgen dat jij als eerste in beeld bent.`,
+    naamsbekendheid: `Consistente zichtbaarheid is het verschil tussen de makelaar die mensen kennen en de makelaar die ze googelen. Wij bouwen dat vertrouwen op in jouw regio.`,
+    dienst:          `Een gerichte campagne op precies de mensen die jouw dienst zoeken. Wij schrijven de copy, bouwen de advertenties en targeten jouw ideale klant.`,
+    alles:           `Op basis van jouw situatie adviseren wij het ${pakket}-pakket — dat combineert meerdere campagnetypen voor brede en duurzame groei.`
+  };
+
+  return {
+    pakket,
+    pakketPrijs:    pakketten[pakket].prijs,
+    pakketSub:      pakketten[pakket].sub,
+    pakketFeatures: pakketten[pakket].features,
+    campType:  camp.type,
+    campIcon:  camp.icon,
+    campSub:   camp.sub,
+    budgetAdvies, budgetSub,
+    title: titles[doel] || titles.opdrachten,
+    sub:   subs[doel]   || subs.opdrachten
+  };
+}
+
+// ─── SHOW RESULT ─────────────────────────────────────────
+function showResult() {
+  document.getElementById('q5').classList.remove('active');
+
+  // Mark all dots done
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.getElementById('dot' + i);
+    dot.classList.remove('active');
+    dot.classList.add('done');
+    const line = document.getElementById('line' + i);
+    if (line) line.classList.add('done');
+  }
+
+  const r = calcResult();
+
+  document.getElementById('resultTitle').textContent  = r.title;
+  document.getElementById('resultSub').textContent    = r.sub;
+  document.getElementById('resPackNaam').textContent  = r.pakket + '-pakket';
+  document.getElementById('resPackPrijs').textContent = r.pakketPrijs;
+  document.getElementById('resCampType').textContent  = r.campType;
+  document.getElementById('resCampIcon').textContent  = r.campIcon;
+  document.getElementById('resCampSub').textContent   = r.campSub;
+  document.getElementById('resBudget').textContent    = r.budgetAdvies;
+  document.getElementById('resBudgetSub').textContent = r.budgetSub;
+
+  // Render features
+  const featEl = document.getElementById('resPackFeatures');
+  featEl.innerHTML = r.pakketFeatures.map(f => `<div class="rf">${f}</div>`).join('');
+
+  // Personalise Ruben message
+  document.getElementById('rubenMsg').textContent =
+    `Op basis van jouw antwoorden adviseer ik het ${r.pakket}-pakket met een ${r.campType.toLowerCase()}. Ik stuur je een concreet voorstel — geen verplichtingen, gewoon een helder overzicht.`;
+
+  document.getElementById('quizResult').classList.add('active');
+  document.getElementById('check').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ─── RESTART ─────────────────────────────────────────────
+function restartQuiz() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  document.querySelectorAll('.qopt').forEach(o => o.classList.remove('selected'));
+  for (let i = 1; i <= 5; i++) {
+    const btn = document.getElementById('next' + i);
+    if (btn) btn.disabled = true;
+  }
+  document.getElementById('quizResult').classList.remove('active');
+  document.getElementById('q1').classList.add('active');
+
+  // Reset dots
+  const labels = ['Doel','Kantoor','Regio','Situatie','Budget'];
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.getElementById('dot' + i);
+    dot.classList.remove('active','done');
+    dot.innerHTML = i + '<span class="qdot-label">' + labels[i-1] + '</span>';
+    if (i === 1) dot.classList.add('active');
+    const line = document.getElementById('line' + i);
+    if (line) line.classList.remove('done');
+  }
+
+  document.querySelector('.quiz-intro').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// Show dots on first interaction
+document.querySelectorAll('.qopt[data-q="1"]').forEach(o => {
+  o.addEventListener('click', () => {
+    const dots = 
+</body>
+</html>

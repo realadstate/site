@@ -1,0 +1,372 @@
+<!--
+╔══════════════════════════════════════════════════════════════╗
+  REAL ADSTATE — WEBFLOW IMPORT: CASE DETAIL PAGINA (TEMPLATE)
+  URL: realadstate.nl/cases/[slug]
+╠══════════════════════════════════════════════════════════════╣
+  STAPPEN:
+  1. Open Webflow → jouw project → Pages → New Page
+  2. Stel slug in op: /cases/[slug]
+  3. Open de pagina → Designer view
+  4. Voeg per sectie een "HTML Embed" component toe
+  5. Kopieer elke sectie uit dit bestand in het juiste embed-blok
+
+  SECTIES IN DIT BESTAND (zie markers in de HTML):
+  - Gebruik als Webflow CMS Template pagina
+  - Hero stats → CMS velden: stat1_val, stat1_lbl, stat2_val etc.
+  - Uitdaging/Aanpak/Resultaat blokken → CMS rich text velden
+  - Testimonial blok → optioneel CMS veld (toon/verberg via conditional)
+  - Afbeeldingen → CMS image velden (1 of 2)
+
+  GLOBAL CSS:
+  Zorg dat webflow-global.css al is toegevoegd via:
+  Site Settings → Custom Code → <head> sectie
+╚══════════════════════════════════════════════════════════════╝
+-->
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case detail pagina (template) — Real Adstate</title>
+<!--
+  WEBFLOW: Voeg webflow-global.css toe via Site Settings → Custom Code
+  De <style> hieronder bevat pagina-specifieke stijlen.
+  In Webflow plak je deze in: Page Settings → Custom Code → <head>
+-->
+<style>
+:root{
+  --navy:#0F2043; --green:#69C28E; --green2:#4aab76;
+  --gd:rgba(105,194,142,0.10); --gb:rgba(105,194,142,0.25);
+  --bg:#F7F8FC; --white:#FFFFFF; --text:#1A2B47;
+  --muted:#6B7A99; --border:#E2E8F0;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+
+/* ── NAV ── */
+nav{background:var(--white);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;padding:0 60px;display:flex;align-items:center;height:68px;}
+.nav-logo{height:22px;margin-right:48px;}
+.nav-links{display:flex;}
+.nav-link{padding:0 18px;height:68px;display:flex;align-items:center;font-size:0.82rem;font-weight:500;color:var(--muted);text-decoration:none;border-bottom:2px solid transparent;transition:all .18s;}
+.nav-link:hover{color:var(--navy);}
+.nav-link.active{color:var(--navy);border-bottom-color:var(--green);font-weight:600;}
+.nav-cta{margin-left:auto;background:var(--navy);color:var(--white);padding:9px 22px;border-radius:5px;font-size:0.8rem;font-weight:700;text-decoration:none;}
+
+/* ── BREADCRUMB ── */
+.breadcrumb{background:var(--white);border-bottom:1px solid var(--border);padding:10px 60px;display:flex;align-items:center;gap:6px;font-size:0.72rem;color:var(--muted);}
+.bc-link{color:var(--muted);text-decoration:none;}
+.bc-link:hover{color:var(--navy);}
+.bc-cur{color:var(--navy);font-weight:600;}
+
+/* ── HERO ── */
+.hero{background:var(--navy);padding:72px 60px 0;display:grid;grid-template-columns:1fr 480px;gap:60px;align-items:end;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 70% 0%,rgba(105,194,142,0.09) 0%,transparent 55%);}
+.hero::after{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.012) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.012) 1px,transparent 1px);background-size:60px 60px;}
+.hero-content{padding-bottom:64px;position:relative;z-index:2;}
+.hero-meta{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.hero-cat{font-size:0.68rem;font-weight:700;padding:4px 12px;border-radius:3px;text-transform:uppercase;letter-spacing:0.06em;}
+/* Kategorie kleuren — kies de juiste, verwijder de rest */
+.cat-makelaars{background:var(--gd);color:var(--green2);}
+.cat-ontwikkelaar{background:rgba(91,156,246,0.15);color:#3b7dd8;}
+.cat-commercial{background:rgba(245,166,35,0.12);color:#c47d00;}
+.hero-loc{font-size:0.75rem;color:rgba(255,255,255,0.38);}
+.hero-loc::before{content:'📍 ';}
+h1{font-family:'DM Serif Display',serif;font-size:2.6rem;color:#fff;line-height:1.1;margin-bottom:16px;}
+h1 em{font-style:italic;color:var(--green);}
+.hero-tagline{font-size:1rem;color:rgba(255,255,255,0.55);line-height:1.75;max-width:500px;margin-bottom:32px;}
+.hero-kanalen{display:flex;gap:8px;flex-wrap:wrap;}
+.hero-kanaal{font-size:0.68rem;font-weight:600;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.65);padding:5px 14px;border-radius:4px;}
+
+/* Hero stat bar */
+.hero-stats{position:relative;z-index:2;align-self:end;padding-bottom:40px;}
+.stat-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.stat-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:18px 18px;}
+.sc-val{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--green);line-height:1;margin-bottom:4px;}
+.sc-lbl{font-size:0.65rem;color:rgba(255,255,255,0.4);line-height:1.4;}
+.stat-card.wide{grid-column:span 2;}
+
+/* ── CASE BODY ── */
+.case-body{max-width:820px;margin:0 auto;padding:64px 60px;}
+.case-section{margin-bottom:52px;}
+.case-section-label{font-family:'Space Mono',monospace;font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.case-section-label::before{content:'';width:14px;height:1px;background:var(--green);}
+h2{font-family:'DM Serif Display',serif;font-size:1.5rem;color:var(--navy);margin-bottom:14px;line-height:1.2;}
+p{font-size:0.88rem;color:var(--muted);line-height:1.85;margin-bottom:12px;}
+p:last-child{margin-bottom:0;}
+strong{color:var(--text);font-weight:700;}
+
+/* Challenge / oplossing / resultaat blokken */
+.case-blocks{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-top:32px;}
+.case-block{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:22px 20px;}
+.case-block.highlight{background:var(--navy);border-color:var(--navy);}
+.cb-num{font-family:'Space Mono',monospace;font-size:0.44rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;}
+.case-block.highlight .cb-num{color:rgba(255,255,255,0.3);}
+.cb-title{font-size:0.85rem;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.case-block.highlight .cb-title{color:#fff;}
+.cb-body{font-size:0.76rem;color:var(--muted);line-height:1.65;}
+.case-block.highlight .cb-body{color:rgba(255,255,255,0.52);}
+
+/* Afbeeldingen */
+.case-img{width:100%;border-radius:10px;display:block;margin:32px 0;}
+.case-img-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:32px 0;}
+.case-img-grid img{width:100%;border-radius:10px;display:block;}
+
+/* Resultaten detail */
+.results-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;margin-top:24px;}
+.rg-item{padding:20px 16px;border-right:1px solid var(--border);text-align:center;}
+.rg-item:last-child{border-right:none;}
+.rg-val{font-family:'DM Serif Display',serif;font-size:1.6rem;color:var(--navy);line-height:1;margin-bottom:4px;}
+.rg-lbl{font-size:0.62rem;color:var(--muted);line-height:1.4;}
+
+/* Testimonial */
+.testimonial{background:var(--navy);border-radius:12px;padding:36px 40px;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;margin-top:32px;}
+.t-av{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--green);flex-shrink:0;}
+.t-quote{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--green);line-height:1;margin-bottom:8px;}
+.t-text{font-size:0.88rem;color:rgba(255,255,255,0.78);line-height:1.75;font-style:italic;margin-bottom:12px;}
+.t-name{font-size:0.8rem;font-weight:700;color:#fff;}
+.t-co{font-size:0.7rem;color:rgba(255,255,255,0.38);}
+
+/* ── CTA ── */
+.case-cta{background:var(--navy);padding:56px 60px;display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center;position:relative;overflow:hidden;}
+.case-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(105,194,142,0.09) 0%,transparent 60%);}
+.cta-inner{position:relative;z-index:2;}
+.cta-mono{font-family:'Space Mono',monospace;font-size:0.52rem;letter-spacing:0.18em;text-transform:uppercase;color:var(--green);margin-bottom:12px;display:block;}
+.cta-title{font-family:'DM Serif Display',serif;font-size:1.8rem;color:#fff;margin-bottom:10px;line-height:1.15;}
+.cta-sub{font-size:0.85rem;color:rgba(255,255,255,0.45);line-height:1.7;max-width:440px;}
+.cta-btns{position:relative;z-index:2;display:flex;flex-direction:column;gap:10px;align-items:flex-end;}
+.btn-primary{background:var(--green);color:var(--navy);padding:13px 28px;border-radius:5px;font-size:0.88rem;font-weight:800;text-decoration:none;white-space:nowrap;}
+.btn-outline{border:1.5px solid rgba(255,255,255,0.2);color:#fff;padding:12px 24px;border-radius:5px;font-size:0.82rem;font-weight:600;text-decoration:none;white-space:nowrap;}
+
+/* ── PREV/NEXT NAV ── */
+.case-nav{background:var(--white);border-top:1px solid var(--border);padding:24px 60px;display:flex;justify-content:space-between;}
+.cn-link{display:flex;flex-direction:column;gap:3px;text-decoration:none;padding:10px 16px;border-radius:6px;border:1px solid var(--border);transition:all .18s;}
+.cn-link:hover{border-color:var(--green);background:var(--gd);}
+.cn-dir{font-family:'Space Mono',monospace;font-size:0.52rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);}
+.cn-title{font-size:0.82rem;font-weight:600;color:var(--navy);}
+</style>
+</head>
+<body>
+<!-- NAV -->
+<nav>
+  <img class="nav-logo" src="https://realadstate.nl/wp-content/uploads/2025/09/RealAdState_Logo_horizontaal_fullcolor.svg"
+    onerror="this.outerHTML='<span style=&quot;font-weight:800;font-size:1rem;color:var(--navy);&quot;>Real<span style=&quot;color:var(--green);&quot;>Adstate</span></span>'" alt="Real Adstate">
+  <div class="nav-links">
+    <a class="nav-link" href="#">Home</a>
+    <a class="nav-link" href="#">Voor Makelaars</a>
+    <a class="nav-link" href="#">Voor Vastgoedontwikkelaars</a>
+    <a class="nav-link active" href="realadstate-cases.html">Cases</a>
+  </div>
+  <a class="nav-cta" href="#">Neem contact op</a>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a class="bc-link" href="#">Home</a> <span style="opacity:.4">›</span>
+  <a class="bc-link" href="realadstate-cases.html">Cases</a> <span style="opacity:.4">›</span>
+  <!-- [[ INVULLEN ]] Korte naam van de case -->
+  <span class="bc-cur">Business units Waddixveen</span>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+  HERO — Bovenste sectie
+  [[ INVULLEN ]] h1, tagline, kanalen, statistieken
+════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-meta">
+      <!--
+        Kies de juiste categorie-kleur:
+        cat-makelaars      → groen  (woning via makelaar)
+        cat-ontwikkelaar   → blauw  (nieuwbouw / project)
+        cat-commercial     → oranje (bedrijfsruimte / kantoor)
+      -->
+      <span class="hero-cat cat-ontwikkelaar">Vastgoedontwikkelaar</span>
+      <!-- [[ INVULLEN ]] Locatie -->
+      <span class="hero-loc">Waddixveen</span>
+    </div>
+
+    <!-- [[ INVULLEN ]] Pakkende h1 — max 8 woorden, gebruik <em> voor nadruk -->
+    <h1>28 businessunits in Waddixveen.<br><em>Uitverkocht.</em></h1>
+
+    <!-- [[ INVULLEN ]] 1–2 zinnen die de kern van het resultaat beschrijven -->
+    <p class="hero-tagline">Gerichte Meta Ads campagne in de verkoopfase: 50.000+ bereik, 500% meer downloads van projectdocumentatie en 200% meer concrete aanvragen.</p>
+
+    <!-- [[ INVULLEN ]] Gebruikte advertentiekanalen — kopieer of verwijder tags -->
+    <div class="hero-kanalen">
+      <span class="hero-kanaal">Meta Ads</span>
+      <span class="hero-kanaal">Facebook</span>
+      <span class="hero-kanaal">Instagram</span>
+      <!-- Optioneel toevoegen: -->
+      <!-- <span class="hero-kanaal">Google Ads</span> -->
+      <!-- <span class="hero-kanaal">LinkedIn</span> -->
+      <!-- <span class="hero-kanaal">YouTube</span> -->
+      <!-- <span class="hero-kanaal">Retargeting</span> -->
+    </div>
+  </div>
+
+  <!-- ── STATISTIEKEN RECHTS ── -->
+  <div class="hero-stats">
+    <div class="stat-cards">
+      <!--
+        [[ INVULLEN ]] 3–4 kerncijfers
+        Gebruik .stat-card.wide als je een cijfer over volle breedte wil
+        sc-val = het getal (bijv. "50K+" of "200%" of "1,5 wk")
+        sc-lbl = korte omschrijving (bijv. "bereikte personen")
+      -->
+      <div class="stat-card">
+        <div class="sc-val">50K+</div>
+        <div class="sc-lbl">bereikte personen</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-val">3.000+</div>
+        <div class="sc-lbl">websitebezoekers</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-val">500%</div>
+        <div class="sc-lbl">meer downloads projectdoc.</div>
+      </div>
+      <div class="stat-card">
+        <div class="sc-val">200%</div>
+        <div class="sc-lbl">meer concrete aanvragen</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════
+  CASE BODY
+════════════════════════════════════════════════════ -->
+<div class="case-body">
+
+  <!-- Uitdaging / Aanpak / Resultaat -->
+  <div class="case-section">
+    <div class="case-blocks">
+
+      <div class="case-block">
+        <div class="cb-num">01 — De uitdaging</div>
+        <!-- [[ INVULLEN ]] Wat was het probleem of de situatie? 2–3 zinnen. -->
+        <div class="cb-title">Zichtbaarheid in de verkoopfase</div>
+        <div class="cb-body">Voor een nieuwbouwproject van 28 luxe businessunits in Waddixveen was het belangrijk om direct bij de start van de verkoopfase zichtbaar te zijn bij de juiste doelgroep: potentiële kopers actief op zoek naar bedrijfsvastgoed in de regio.</div>
+      </div>
+
+      <div class="case-block highlight">
+        <div class="cb-num">02 — De aanpak</div>
+        <!-- [[ INVULLEN ]] Wat hebben jullie gedaan? Kanalen, targeting, creatief. -->
+        <div class="cb-title">Gerichte Meta Ads campagne</div>
+        <div class="cb-body">We zetten een gerichte campagne op via Meta Ads (Facebook & Instagram). Met krachtige visuals, doelgroepgerichte copy en een duidelijke landingspagina. Bezoekers konden direct brochures en prijslijsten downloaden — waardevolle leads voor het verkoopteam.</div>
+      </div>
+
+      <div class="case-block">
+        <div class="cb-num">03 — Het resultaat</div>
+        <!-- [[ INVULLEN ]] Wat waren de uitkomsten? Gebruik concrete cijfers. -->
+        <div class="cb-title">Meer dan verwacht</div>
+        <div class="cb-body">De campagne bereikte meer dan 50.000 personen en trok ruim 3.000 bezoekers. 500% stijging in downloads van projectdocumentatie en 200% meer concrete aanvragen met contactgegevens.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Uitgebreid verhaal -->
+  <div class="case-section">
+    <div class="case-section-label">De campagne</div>
+    <!-- [[ INVULLEN ]] Uitgebreider verhaal in 2–4 alinea's -->
+    <h2>Hoe we het aanpakten</h2>
+    <p>Voor Waddixveen ontwikkelden we een campagne die specifiek gericht was op ondernemers en investeerders in de regio Zuid-Holland. De targeting was scherp: leeftijd 30–55, interesse in zakelijk vastgoed, werkend in relevante sectoren binnen een straal van 40 km.</p>
+    <p>De advertenties lieten de businessunits zien vanuit het perspectief van de ondernemer: ruimte, groei, eigen pand. De CTA leidde direct naar een landingspagina met downloadvormulier — zo konden geïnteresseerden de brochure en prijslijst ophalen zonder drempel.</p>
+    <p><strong>Retargeting</strong> speelde ook een rol: bezoekers die de landingspagina hadden bezocht maar nog niet hadden gedownload, kregen een gerichte follow-up advertentie te zien met een directere boodschap.</p>
+  </div>
+
+  <!-- Afbeelding(en) -->
+  <!-- [[ INVULLEN ]] Vervang de src door jouw projectafbeelding(en) -->
+  <!-- Optie A: één grote afbeelding -->
+  <img class="case-img"
+       src="https://realadstate.nl/wp-content/uploads/2025/11/Ontwerp-zonder-titel-1.png"
+       alt="Campagne resultaten Waddixveen"
+       onerror="this.style.display='none'">
+
+  <!-- Optie B: twee afbeeldingen naast elkaar — verwijder commentaar om te gebruiken -->
+  <!--
+  <div class="case-img-grid">
+    <img src="[[ URL AFBEELDING 1 ]]" alt="[[ ALT TEKST ]]">
+    <img src="[[ URL AFBEELDING 2 ]]" alt="[[ ALT TEKST ]]">
+  </div>
+  -->
+
+  <!-- Resultaten detail -->
+  <div class="case-section">
+    <div class="case-section-label">Resultaten</div>
+    <h2>De cijfers</h2>
+    <p>Binnen de eerste campagneperiode realiseerden we de volgende resultaten:</p>
+
+    <!-- [[ INVULLEN ]] 4 kerncijfers — kopieer rg-item voor meer -->
+    <div class="results-grid">
+      <div class="rg-item">
+        <div class="rg-val">50.000+</div>
+        <div class="rg-lbl">bereikte personen</div>
+      </div>
+      <div class="rg-item">
+        <div class="rg-val">3.000+</div>
+        <div class="rg-lbl">websitebezoekers</div>
+      </div>
+      <div class="rg-item">
+        <div class="rg-val">500%</div>
+        <div class="rg-lbl">stijging downloads<br>projectdocumentatie</div>
+      </div>
+      <div class="rg-item">
+        <div class="rg-val">200%</div>
+        <div class="rg-lbl">stijging concrete<br>aanvragen</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonial — verwijder dit blok als er geen testimonial is -->
+  <!--
+  <div class="case-section">
+    <div class="case-section-label">Wat de klant zegt</div>
+    <div class="testimonial">
+      <img class="t-av"
+           src="[[ URL PROFIELFOTO ]]"
+           alt="[[ NAAM ]]"
+           onerror="this.style.background='var(--green)'">
+      <div>
+        <div class="t-quote">"</div>
+        [[ INVULLEN ]] Testimonial tekst
+        <div class="t-text">De samenwerking was heel prettig. Alles werd professioneel opgezet, in onze stijl, en we zagen het aantal bezichtigingen snel oplopen.</div>
+        [[ INVULLEN ]] Naam en bedrijf
+        <div class="t-name">Cees Steur</div>
+        <div class="t-co">Cees Steur Makelaars — Halfweg</div>
+      </div>
+    </div>
+  </div>
+  -->
+
+</div><!-- /case-body -->
+
+<!-- CTA -->
+<div class="case-cta">
+  <div class="cta-inner">
+    <span class="cta-mono">Vergelijkbaar project?</span>
+    <div class="cta-title">Wij doen dit ook<br>voor jouw project.</div>
+    <p class="cta-sub">Plan een vrijblijvend gesprek van 20–30 minuten. We kijken naar jouw project, doelgroep en budget — en geven een concreet advies.</p>
+  </div>
+  <div class="cta-btns">
+    <a href="#" class="btn-primary">Plan een gesprek →</a>
+    <a href="realadstate-cases.html" class="btn-outline">← Terug naar cases</a>
+  </div>
+</div>
+
+<!-- PREV / NEXT NAV -->
+<!-- [[ INVULLEN ]] Verwijzer naar vorige en volgende case — verwijder wat niet van toepassing is -->
+<div class="case-nav">
+  <a href="#" class="cn-link">
+    <span class="cn-dir">← Vorige case</span>
+    <span class="cn-title">Villa Zwanenburg</span>
+  </a>
+  <a href="#" class="cn-link" style="text-align:right;">
+    <span class="cn-dir">Volgende case →</span>
+    <span class="cn-title">Nieuwbouw Arnhem</span>
+  </a>
+</div>
+</body>
+</html>

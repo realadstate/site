@@ -1,0 +1,1222 @@
+<!--
+================================================================================
+  REAL ADSTATE — WEBFLOW EMBED: QUIZ
+  Kantoor-check quiz (6 stappen, multi-select, gepersonaliseerd resultaat)
+  Gebruik: makelaardiensten pagina — vervangt de CTA-sectie onderaan
+
+  HOE PLAKKEN IN WEBFLOW:
+  1. Sleep een "Embed" element naar de canvas op de juiste positie
+  2. Dubbelklik het Embed element → code editor opent
+  3. Kopieer ALLES hieronder (van <style> tot en met </script>)
+  4. Plak in de code editor → Save & Close
+  5. Publish de pagina
+================================================================================
+-->
+<style>
+/* ── RESET ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+
+/* ─── TOKENS ─── */
+:root {
+  --navy:   #0F2043;
+  --green:  #69C28E;
+  --green2: #4aab76;
+  --gd:     rgba(105,194,142,0.12);
+  --gb:     rgba(105,194,142,0.28);
+  --bg:     #F8F9FC;
+  --white:  #FFFFFF;
+  --text:   #1A2B47;
+  --muted:  #6B7A99;
+  --border: #E2E8F0;
+  --navy10: rgba(15,32,67,0.06);
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; }
+
+
+/* ─── QUIZ SECTIE ─── */
+.quiz-section {
+  background:var(--navy); padding:80px 60px;
+  position:relative; overflow:hidden;
+}
+.quiz-section::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 60% 0%, rgba(105,194,142,0.1) 0%, transparent 60%);
+  pointer-events:none;
+}
+.quiz-wrap {
+  max-width:860px; margin:0 auto; position:relative; z-index:1;
+}
+.quiz-intro { text-align:center; margin-bottom:52px; }
+.quiz-intro-tag {
+  font-family:'Space Mono',monospace; font-size:0.54rem;
+  letter-spacing:0.18em; text-transform:uppercase; color:var(--green);
+  margin-bottom:14px; display:block;
+}
+.quiz-intro h2 { font-family:'DM Serif Display',serif; font-size:2.2rem; color:#fff; margin-bottom:12px; line-height:1.15; }
+.quiz-intro p { font-size:0.9rem; color:rgba(255,255,255,0.48); max-width:480px; margin:0 auto; line-height:1.7; }
+
+/* Progress bar */
+.quiz-progress { margin-bottom:36px; }
+.qp-meta {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:10px;
+}
+.qp-step {
+  font-family:'Space Mono',monospace; font-size:0.54rem;
+  letter-spacing:0.12em; text-transform:uppercase; color:var(--green);
+}
+.qp-label { font-size:0.75rem; color:rgba(255,255,255,0.45); }
+.qp-track {
+  height:3px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden;
+}
+.qp-fill {
+  height:100%; background:var(--green); border-radius:2px;
+  transition:width .5s cubic-bezier(.22,1,.36,1);
+}
+
+/* Question card */
+.quiz-card {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:14px; padding:40px 44px;
+  backdrop-filter:blur(8px);
+  display:none;
+}
+.quiz-card.active {
+  display:block;
+  animation:qrise .35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes qrise { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+.quiz-q {
+  font-family:'DM Serif Display',serif;
+  font-size:1.45rem; color:#fff; line-height:1.25;
+  margin-bottom:8px;
+}
+.quiz-qsub {
+  font-size:0.78rem; color:rgba(255,255,255,0.38);
+  margin-bottom:28px; line-height:1.5;
+}
+
+/* Answer options */
+.quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.quiz-options.single { grid-template-columns:1fr; }
+.qopt {
+  background:rgba(255,255,255,0.04);
+  border:1.5px solid rgba(255,255,255,0.1);
+  border-radius:10px; padding:16px 20px;
+  cursor:pointer; transition:all .18s;
+  display:flex; align-items:center; gap:14px;
+  text-align:left;
+}
+.qopt:hover {
+  background:rgba(105,194,142,0.08);
+  border-color:rgba(105,194,142,0.35);
+}
+.qopt.selected {
+  background:rgba(105,194,142,0.12);
+  border-color:var(--green);
+}
+.qopt-icon {
+  width:38px; height:38px; border-radius:9px;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem; flex-shrink:0; transition:all .18s;
+}
+.qopt.selected .qopt-icon { background:var(--gd); border-color:var(--gb); }
+.qopt-txt { flex:1; }
+.qopt-main { font-size:0.85rem; font-weight:600; color:#fff; margin-bottom:3px; line-height:1.3; }
+.qopt-sub { font-size:0.7rem; color:rgba(255,255,255,0.4); line-height:1.4; }
+.qopt-check {
+  width:20px; height:20px; border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.15);
+  flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  font-size:0.65rem; transition:all .18s;
+}
+.qopt.selected .qopt-check {
+  background:var(--green); border-color:var(--green); color:var(--navy); font-weight:800;
+}
+/* Multi-select: square checkbox shape */
+.multi-select .qopt-check { border-radius:5px; }
+/* Multi-select hint label */
+.quiz-multi-hint {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(105,194,142,0.1); border:1px solid rgba(105,194,142,0.22);
+  border-radius:20px; padding:4px 12px;
+  font-size:0.62rem; color:rgba(255,255,255,0.5);
+  margin-bottom:18px;
+}
+.quiz-multi-hint::before { content:'☑'; color:var(--green); font-size:0.7rem; }
+
+/* Nav buttons */
+.quiz-nav {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:28px;
+}
+.qbtn-back {
+  background:none; border:1px solid rgba(255,255,255,0.15);
+  color:rgba(255,255,255,0.5); padding:10px 20px; border-radius:6px;
+  font-size:0.78rem; font-weight:600; cursor:pointer; font-family:inherit;
+  transition:all .18s;
+}
+.qbtn-back:hover { border-color:rgba(255,255,255,0.35); color:#fff; }
+.qbtn-back:disabled { opacity:0.2; cursor:default; }
+.qbtn-next {
+  background:var(--green); color:var(--navy);
+  border:none; padding:12px 28px; border-radius:6px;
+  font-size:0.85rem; font-weight:800; cursor:pointer; font-family:inherit;
+  transition:background .18s; display:flex; align-items:center; gap:8px;
+}
+.qbtn-next:hover { background:var(--green2); }
+.qbtn-next:disabled { opacity:0.35; cursor:default; }
+
+/* ─── RESULT SCREEN ─── */
+.quiz-result {
+  display:none;
+  animation:qrise .4s cubic-bezier(.22,1,.36,1);
+}
+.quiz-result.active { display:block; }
+
+.result-header {
+  text-align:center; margin-bottom:40px;
+}
+.result-match {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--gd); border:1px solid var(--gb);
+  border-radius:20px; padding:6px 16px;
+  font-family:'Space Mono',monospace; font-size:0.56rem;
+  letter-spacing:0.12em; text-transform:uppercase; color:var(--green);
+  margin-bottom:16px;
+}
+.result-title { font-family:'DM Serif Display',serif; font-size:2rem; color:#fff; line-height:1.15; margin-bottom:10px; }
+.result-sub { font-size:0.85rem; color:rgba(255,255,255,0.45); max-width:520px; margin:0 auto; line-height:1.7; }
+
+/* Result cards grid */
+.result-grid {
+  display:grid; grid-template-columns:1.1fr 1fr 1fr; gap:16px;
+  margin-bottom:28px;
+}
+.res-card {
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.09);
+  border-radius:12px; padding:22px 20px;
+}
+.res-card.featured {
+  background:rgba(105,194,142,0.1); border-color:rgba(105,194,142,0.35);
+}
+.res-card-tag {
+  font-family:'Space Mono',monospace; font-size:0.46rem;
+  letter-spacing:0.14em; text-transform:uppercase;
+  color:rgba(255,255,255,0.35); margin-bottom:8px;
+}
+.res-card.featured .res-card-tag { color:var(--green); }
+.res-card-title { font-size:0.9rem; font-weight:700; color:#fff; margin-bottom:6px; }
+.res-card-val {
+  font-family:'DM Serif Display',serif; font-size:1.5rem; color:#fff;
+  line-height:1; margin-bottom:4px;
+}
+.res-card.featured .res-card-val { color:var(--green); }
+.res-card-sub { font-size:0.68rem; color:rgba(255,255,255,0.38); line-height:1.5; }
+
+/* Ruben contact block */
+.result-ruben {
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px; padding:28px 32px;
+  display:grid; grid-template-columns:auto 1fr auto; gap:20px; align-items:center;
+}
+.rr-av { width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid var(--green); }
+.rr-txt {}
+.rr-name { font-size:0.88rem; font-weight:700; color:#fff; margin-bottom:4px; }
+.rr-sub { font-size:0.75rem; color:rgba(255,255,255,0.42); line-height:1.55; }
+.rr-actions { display:flex; flex-direction:column; gap:8px; }
+.rr-btn-primary {
+  background:var(--green); color:var(--navy);
+  border:none; padding:11px 22px; border-radius:6px;
+  font-size:0.8rem; font-weight:800; cursor:pointer; font-family:inherit;
+  text-decoration:none; display:block; text-align:center; white-space:nowrap;
+  transition:background .18s;
+}
+.rr-btn-primary:hover { background:var(--green2); }
+.rr-btn-secondary {
+  background:none; border:1px solid rgba(255,255,255,0.18);
+  color:rgba(255,255,255,0.6); padding:10px 22px; border-radius:6px;
+  font-size:0.78rem; font-weight:600; cursor:pointer; font-family:inherit;
+  text-decoration:none; display:block; text-align:center; white-space:nowrap;
+  transition:all .18s;
+}
+.rr-btn-secondary:hover { border-color:rgba(255,255,255,0.4); color:#fff; }
+
+.result-restart {
+  text-align:center; margin-top:20px;
+}
+.restart-btn {
+  background:none; border:none; color:rgba(255,255,255,0.25);
+  font-size:0.72rem; cursor:pointer; font-family:inherit;
+  text-decoration:underline; transition:color .18s;
+}
+.restart-btn:hover { color:rgba(255,255,255,0.5); }
+
+/* ─── FOOTER NAV HINT ─── */
+.page-nav {
+  background:var(--white); border-top:1px solid var(--border);
+  padding:24px 60px; display:flex; align-items:center; justify-content:space-between;
+}
+.pnav-prev, .pnav-next {
+  display:flex; align-items:center; gap:10px; text-decoration:none;
+  padding:10px 18px; border-radius:6px; border:1px solid var(--border);
+  transition:all .18s;
+}
+.pnav-prev:hover, .pnav-next:hover { border-color:var(--green); background:var(--gd); }
+.pnav-dir { font-size:0.62rem; color:var(--muted); font-family:'Space Mono',monospace; letter-spacing:0.1em; text-transform:uppercase; }
+.pnav-title { font-size:0.82rem; font-weight:600; color:var(--navy); }
+
+/* ─── WIREFRAME ANNOTATION ─── */
+.wf-note {
+  display:inline-flex; align-items:center; gap:6px;
+  background:#FFF8E7; border:1px solid #F5CC5A;
+  border-radius:4px; padding:5px 12px;
+  font-family:'Space Mono',monospace; font-size:0.56rem;
+  color:#8B6914; letter-spacing:0.06em; margin-bottom:24px;
+}
+
+/* ─── FAQ ─── */
+.faq { max-width:720px; margin:48px auto 0; }
+.faq-item { border-bottom:1px solid var(--border); }
+.faq-q {
+  padding:18px 0; display:flex; justify-content:space-between; align-items:center;
+  font-size:0.88rem; font-weight:600; color:var(--navy); cursor:pointer;
+}
+.faq-q:hover { color:var(--green2); }
+.faq-icon { color:var(--green); font-size:1.1rem; flex-shrink:0; }
+.faq-a { padding:0 0 16px; font-size:0.8rem; color:var(--muted); line-height:1.7; }
+
+/* ─── AD MOCKUP ─── */
+.ad-preview {
+  width:260px; background:#fff; border-radius:8px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.15); overflow:hidden;
+  font-family:-apple-system,sans-serif; flex-shrink:0;
+}
+.ap-bar { background:#1877f2; padding:6px 8px; display:flex; align-items:center; }
+.ap-f { color:#fff; font-weight:900; font-size:0.85rem; letter-spacing:-1px; }
+.ap-hd { padding:7px 9px; display:flex; align-items:center; gap:6px; background:#fff; }
+.ap-av { width:26px; height:26px; border-radius:50%; background:var(--navy); display:flex; align-items:center; justify-content:center; font-size:0.44rem; font-weight:800; color:#fff; flex-shrink:0; }
+.ap-nm { font-size:0.6rem; font-weight:700; color:#1a1a1a; }
+.ap-sp { font-size:0.5rem; color:#888; }
+.ap-img {
+  aspect-ratio:1.91/1; background:var(--navy); position:relative; overflow:hidden;
+  display:flex; align-items:flex-end; justify-content:flex-start; padding:9px;
+}
+.ap-img-bg { position:absolute; inset:0; background:linear-gradient(135deg,#0f2043 0%,#1a3a5c 60%,#0d2a1e 100%); }
+.ap-img-veil { position:absolute; bottom:0; left:0; right:0; height:55%; background:linear-gradient(0deg,rgba(6,10,24,.85),transparent); }
+.ap-img-content { position:relative; z-index:2; }
+.ap-tx { padding:5px 9px 6px; font-size:0.58rem; color:#1a1a1a; line-height:1.45; background:#fff; }
+.ap-lk { background:#f0f2f5; border-top:1px solid #e4e6eb; padding:6px 9px; display:flex; align-items:center; justify-content:space-between; }
+.ap-ld { font-size:0.44rem; color:#888; text-transform:uppercase; }
+.ap-lt { font-size:0.56rem; font-weight:700; color:#1a1a1a; margin-top:1px; }
+.ap-bt { background:var(--green); color:var(--navy); border:none; border-radius:4px; padding:5px 10px; font-size:0.56rem; font-weight:700; cursor:pointer; }
+
+
+
+/* ── STANDALONE WRAPPER ── */
+.quiz-standalone {
+  background: var(--navy);
+  min-height: 100vh;
+  padding: 60px 20px;
+}
+</style>
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Real Adstate — Kantoor-check Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;-webkit-font-smoothing:antialiased;}
+
+/* ─── TOKENS ─── */
+:root {
+  --navy:   #0F2043;
+  --green:  #69C28E;
+  --green2: #4aab76;
+  --gd:     rgba(105,194,142,0.12);
+  --gb:     rgba(105,194,142,0.28);
+  --bg:     #F8F9FC;
+  --white:  #FFFFFF;
+  --text:   #1A2B47;
+  --muted:  #6B7A99;
+  --border: #E2E8F0;
+  --navy10: rgba(15,32,67,0.06);
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; }
+
+
+/* ─── QUIZ SECTIE ─── */
+.quiz-section {
+  background:var(--navy); padding:80px 60px;
+  position:relative; overflow:hidden;
+}
+.quiz-section::before {
+  content:''; position:absolute; inset:0;
+  background:radial-gradient(ellipse at 60% 0%, rgba(105,194,142,0.1) 0%, transparent 60%);
+  pointer-events:none;
+}
+.quiz-wrap {
+  max-width:860px; margin:0 auto; position:relative; z-index:1;
+}
+.quiz-intro { text-align:center; margin-bottom:52px; }
+.quiz-intro-tag {
+  font-family:'Space Mono',monospace; font-size:0.54rem;
+  letter-spacing:0.18em; text-transform:uppercase; color:var(--green);
+  margin-bottom:14px; display:block;
+}
+.quiz-intro h2 { font-family:'DM Serif Display',serif; font-size:2.2rem; color:#fff; margin-bottom:12px; line-height:1.15; }
+.quiz-intro p { font-size:0.9rem; color:rgba(255,255,255,0.48); max-width:480px; margin:0 auto; line-height:1.7; }
+
+/* Progress bar */
+.quiz-progress { margin-bottom:36px; }
+.qp-meta {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-bottom:10px;
+}
+.qp-step {
+  font-family:'Space Mono',monospace; font-size:0.54rem;
+  letter-spacing:0.12em; text-transform:uppercase; color:var(--green);
+}
+.qp-label { font-size:0.75rem; color:rgba(255,255,255,0.45); }
+.qp-track {
+  height:3px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden;
+}
+.qp-fill {
+  height:100%; background:var(--green); border-radius:2px;
+  transition:width .5s cubic-bezier(.22,1,.36,1);
+}
+
+/* Question card */
+.quiz-card {
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.09);
+  border-radius:14px; padding:40px 44px;
+  backdrop-filter:blur(8px);
+  display:none;
+}
+.quiz-card.active {
+  display:block;
+  animation:qrise .35s cubic-bezier(.22,1,.36,1);
+}
+@keyframes qrise { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+.quiz-q {
+  font-family:'DM Serif Display',serif;
+  font-size:1.45rem; color:#fff; line-height:1.25;
+  margin-bottom:8px;
+}
+.quiz-qsub {
+  font-size:0.78rem; color:rgba(255,255,255,0.38);
+  margin-bottom:28px; line-height:1.5;
+}
+
+/* Answer options */
+.quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.quiz-options.single { grid-template-columns:1fr; }
+.qopt {
+  background:rgba(255,255,255,0.04);
+  border:1.5px solid rgba(255,255,255,0.1);
+  border-radius:10px; padding:16px 20px;
+  cursor:pointer; transition:all .18s;
+  display:flex; align-items:center; gap:14px;
+  text-align:left;
+}
+.qopt:hover {
+  background:rgba(105,194,142,0.08);
+  border-color:rgba(105,194,142,0.35);
+}
+.qopt.selected {
+  background:rgba(105,194,142,0.12);
+  border-color:var(--green);
+}
+.qopt-icon {
+  width:38px; height:38px; border-radius:9px;
+  background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.1rem; flex-shrink:0; transition:all .18s;
+}
+.qopt.selected .qopt-icon { background:var(--gd); border-color:var(--gb); }
+.qopt-txt { flex:1; }
+.qopt-main { font-size:0.85rem; font-weight:600; color:#fff; margin-bottom:3px; line-height:1.3; }
+.qopt-sub { font-size:0.7rem; color:rgba(255,255,255,0.4); line-height:1.4; }
+.qopt-check {
+  width:20px; height:20px; border-radius:50%;
+  border:1.5px solid rgba(255,255,255,0.15);
+  flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  font-size:0.65rem; transition:all .18s;
+}
+.qopt.selected .qopt-check {
+  background:var(--green); border-color:var(--green); color:var(--navy); font-weight:800;
+}
+/* Multi-select: square checkbox shape */
+.multi-select .qopt-check { border-radius:5px; }
+/* Multi-select hint label */
+.quiz-multi-hint {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(105,194,142,0.1); border:1px solid rgba(105,194,142,0.22);
+  border-radius:20px; padding:4px 12px;
+  font-size:0.62rem; color:rgba(255,255,255,0.5);
+  margin-bottom:18px;
+}
+.quiz-multi-hint::before { content:'☑'; color:var(--green); font-size:0.7rem; }
+
+/* Nav buttons */
+.quiz-nav {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-top:28px;
+}
+.qbtn-back {
+  background:none; border:1px solid rgba(255,255,255,0.15);
+  color:rgba(255,255,255,0.5); padding:10px 20px; border-radius:6px;
+  font-size:0.78rem; font-weight:600; cursor:pointer; font-family:inherit;
+  transition:all .18s;
+}
+.qbtn-back:hover { border-color:rgba(255,255,255,0.35); color:#fff; }
+.qbtn-back:disabled { opacity:0.2; cursor:default; }
+.qbtn-next {
+  background:var(--green); color:var(--navy);
+  border:none; padding:12px 28px; border-radius:6px;
+  font-size:0.85rem; font-weight:800; cursor:pointer; font-family:inherit;
+  transition:background .18s; display:flex; align-items:center; gap:8px;
+}
+.qbtn-next:hover { background:var(--green2); }
+.qbtn-next:disabled { opacity:0.35; cursor:default; }
+
+/* ─── RESULT SCREEN ─── */
+.quiz-result {
+  display:none;
+  animation:qrise .4s cubic-bezier(.22,1,.36,1);
+}
+.quiz-result.active { display:block; }
+
+.result-header {
+  text-align:center; margin-bottom:40px;
+}
+.result-match {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--gd); border:1px solid var(--gb);
+  border-radius:20px; padding:6px 16px;
+  font-family:'Space Mono',monospace; font-size:0.56rem;
+  letter-spacing:0.12em; text-transform:uppercase; color:var(--green);
+  margin-bottom:16px;
+}
+.result-title { font-family:'DM Serif Display',serif; font-size:2rem; color:#fff; line-height:1.15; margin-bottom:10px; }
+.result-sub { font-size:0.85rem; color:rgba(255,255,255,0.45); max-width:520px; margin:0 auto; line-height:1.7; }
+
+/* Result cards grid */
+.result-grid {
+  display:grid; grid-template-columns:1.1fr 1fr 1fr; gap:16px;
+  margin-bottom:28px;
+}
+.res-card {
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.09);
+  border-radius:12px; padding:22px 20px;
+}
+.res-card.featured {
+  background:rgba(105,194,142,0.1); border-color:rgba(105,194,142,0.35);
+}
+.res-card-tag {
+  font-family:'Space Mono',monospace; font-size:0.46rem;
+  letter-spacing:0.14em; text-transform:uppercase;
+  color:rgba(255,255,255,0.35); margin-bottom:8px;
+}
+.res-card.featured .res-card-tag { color:var(--green); }
+.res-card-title { font-size:0.9rem; font-weight:700; color:#fff; margin-bottom:6px; }
+.res-card-val {
+  font-family:'DM Serif Display',serif; font-size:1.5rem; color:#fff;
+  line-height:1; margin-bottom:4px;
+}
+.res-card.featured .res-card-val { color:var(--green); }
+.res-card-sub { font-size:0.68rem; color:rgba(255,255,255,0.38); line-height:1.5; }
+
+/* Ruben contact block */
+.result-ruben {
+  background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px; padding:28px 32px;
+  display:grid; grid-template-columns:auto 1fr auto; gap:20px; align-items:center;
+}
+.rr-av { width:56px; height:56px; border-radius:50%; object-fit:cover; border:2px solid var(--green); }
+.rr-txt {}
+.rr-name { font-size:0.88rem; font-weight:700; color:#fff; margin-bottom:4px; }
+.rr-sub { font-size:0.75rem; color:rgba(255,255,255,0.42); line-height:1.55; }
+.rr-actions { display:flex; flex-direction:column; gap:8px; }
+.rr-btn-primary {
+  background:var(--green); color:var(--navy);
+  border:none; padding:11px 22px; border-radius:6px;
+  font-size:0.8rem; font-weight:800; cursor:pointer; font-family:inherit;
+  text-decoration:none; display:block; text-align:center; white-space:nowrap;
+  transition:background .18s;
+}
+.rr-btn-primary:hover { background:var(--green2); }
+.rr-btn-secondary {
+  background:none; border:1px solid rgba(255,255,255,0.18);
+  color:rgba(255,255,255,0.6); padding:10px 22px; border-radius:6px;
+  font-size:0.78rem; font-weight:600; cursor:pointer; font-family:inherit;
+  text-decoration:none; display:block; text-align:center; white-space:nowrap;
+  transition:all .18s;
+}
+.rr-btn-secondary:hover { border-color:rgba(255,255,255,0.4); color:#fff; }
+
+.result-restart {
+  text-align:center; margin-top:20px;
+}
+.restart-btn {
+  background:none; border:none; color:rgba(255,255,255,0.25);
+  font-size:0.72rem; cursor:pointer; font-family:inherit;
+  text-decoration:underline; transition:color .18s;
+}
+.restart-btn:hover { color:rgba(255,255,255,0.5); }
+
+/* ─── FOOTER NAV HINT ─── */
+.page-nav {
+  background:var(--white); border-top:1px solid var(--border);
+  padding:24px 60px; display:flex; align-items:center; justify-content:space-between;
+}
+.pnav-prev, .pnav-next {
+  display:flex; align-items:center; gap:10px; text-decoration:none;
+  padding:10px 18px; border-radius:6px; border:1px solid var(--border);
+  transition:all .18s;
+}
+.pnav-prev:hover, .pnav-next:hover { border-color:var(--green); background:var(--gd); }
+.pnav-dir { font-size:0.62rem; color:var(--muted); font-family:'Space Mono',monospace; letter-spacing:0.1em; text-transform:uppercase; }
+.pnav-title { font-size:0.82rem; font-weight:600; color:var(--navy); }
+
+/* ─── WIREFRAME ANNOTATION ─── */
+.wf-note {
+  display:inline-flex; align-items:center; gap:6px;
+  background:#FFF8E7; border:1px solid #F5CC5A;
+  border-radius:4px; padding:5px 12px;
+  font-family:'Space Mono',monospace; font-size:0.56rem;
+  color:#8B6914; letter-spacing:0.06em; margin-bottom:24px;
+}
+
+/* ─── FAQ ─── */
+.faq { max-width:720px; margin:48px auto 0; }
+.faq-item { border-bottom:1px solid var(--border); }
+.faq-q {
+  padding:18px 0; display:flex; justify-content:space-between; align-items:center;
+  font-size:0.88rem; font-weight:600; color:var(--navy); cursor:pointer;
+}
+.faq-q:hover { color:var(--green2); }
+.faq-icon { color:var(--green); font-size:1.1rem; flex-shrink:0; }
+.faq-a { padding:0 0 16px; font-size:0.8rem; color:var(--muted); line-height:1.7; }
+
+/* ─── AD MOCKUP ─── */
+.ad-preview {
+  width:260px; background:#fff; border-radius:8px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.15); overflow:hidden;
+  font-family:-apple-system,sans-serif; flex-shrink:0;
+}
+.ap-bar { background:#1877f2; padding:6px 8px; display:flex; align-items:center; }
+.ap-f { color:#fff; font-weight:900; font-size:0.85rem; letter-spacing:-1px; }
+.ap-hd { padding:7px 9px; display:flex; align-items:center; gap:6px; background:#fff; }
+.ap-av { width:26px; height:26px; border-radius:50%; background:var(--navy); display:flex; align-items:center; justify-content:center; font-size:0.44rem; font-weight:800; color:#fff; flex-shrink:0; }
+.ap-nm { font-size:0.6rem; font-weight:700; color:#1a1a1a; }
+.ap-sp { font-size:0.5rem; color:#888; }
+.ap-img {
+  aspect-ratio:1.91/1; background:var(--navy); position:relative; overflow:hidden;
+  display:flex; align-items:flex-end; justify-content:flex-start; padding:9px;
+}
+.ap-img-bg { position:absolute; inset:0; background:linear-gradient(135deg,#0f2043 0%,#1a3a5c 60%,#0d2a1e 100%); }
+.ap-img-veil { position:absolute; bottom:0; left:0; right:0; height:55%; background:linear-gradient(0deg,rgba(6,10,24,.85),transparent); }
+.ap-img-content { position:relative; z-index:2; }
+.ap-tx { padding:5px 9px 6px; font-size:0.58rem; color:#1a1a1a; line-height:1.45; background:#fff; }
+.ap-lk { background:#f0f2f5; border-top:1px solid #e4e6eb; padding:6px 9px; display:flex; align-items:center; justify-content:space-between; }
+.ap-ld { font-size:0.44rem; color:#888; text-transform:uppercase; }
+.ap-lt { font-size:0.56rem; font-weight:700; color:#1a1a1a; margin-top:1px; }
+.ap-bt { background:var(--green); color:var(--navy); border:none; border-radius:4px; padding:5px 10px; font-size:0.56rem; font-weight:700; cursor:pointer; }
+
+
+
+/* ── STANDALONE WRAPPER ── */
+.quiz-standalone {
+  background: var(--navy);
+  min-height: 100vh;
+  padding: 60px 20px;
+}
+</style>
+</head>
+<body>
+<div class="quiz-standalone">
+<!-- ─── QUIZ ─── -->
+<section class="quiz-section" id="check">
+  <div class="quiz-wrap">
+
+    <!-- Intro -->
+    <div class="quiz-intro">
+      <span class="quiz-intro-tag">Gratis kantoor-check — 2 minuten</span>
+      <h2>Past adverteren bij<br>jouw makelaarskantoor?</h2>
+      <p>Beantwoord 5 korte vragen en ontdek welk campagnetype en pakket het beste aansluit op jouw situatie.</p>
+    </div>
+
+    <!-- Progress -->
+    <div class="quiz-progress" id="quizProgress" style="display:none;">
+      <div class="qp-meta">
+        <span class="qp-step" id="qpStep">Stap 1 van 6</span>
+        <span class="qp-label" id="qpLabel">Jouw doel</span>
+      </div>
+      <div class="qp-track"><div class="qp-fill" id="qpFill" style="width:20%;"></div></div>
+    </div>
+
+    <!-- Q1: Primair doel (multi-select) -->
+    <div class="quiz-card active" id="q1">
+      <div class="quiz-q">Wat wil je bereiken met adverteren?</div>
+      <div class="quiz-qsub">Je kunt meerdere doelen kiezen — we stemmen het advies af op de combinatie.</div>
+      <div class="quiz-multi-hint">Meerdere antwoorden mogelijk</div>
+      <div class="quiz-options multi-select">
+        <div class="qopt" data-q="1" data-val="opdrachten" onclick="selectMulti(this, '1')">
+          <div class="qopt-icon">🏡</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Meer verkoopopdrachten</div>
+            <div class="qopt-sub">Huiseigenaren bereiken die willen verkopen</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="1" data-val="naamsbekendheid" onclick="selectMulti(this, '1')">
+          <div class="qopt-icon">📣</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Naamsbekendheid opbouwen</div>
+            <div class="qopt-sub">Dé makelaar van mijn regio worden</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="1" data-val="leads" onclick="selectMulti(this, '1')">
+          <div class="qopt-icon">📥</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Meer inbound leads</div>
+            <div class="qopt-sub">Aanvragen van kopers en verkopers genereren</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="1" data-val="uitbreiden" onclick="selectMulti(this, '1')">
+          <div class="qopt-icon">🚀</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Uitbreiden naar nieuwe regio</div>
+            <div class="qopt-sub">Nieuwe gemeente of vestiging bekend maken</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+      </div>
+      <div class="quiz-nav">
+        <button class="qbtn-back" disabled>← Vorige</button>
+        <button class="qbtn-next" id="next1" disabled onclick="nextStep(1)">Volgende →</button>
+      </div>
+    </div>
+
+    <!-- Q1b: Welke diensten (multi-select) -->
+    <div class="quiz-card" id="q1b">
+      <div class="quiz-q">Welke diensten wil je promoten?</div>
+      <div class="quiz-qsub">Selecteer alles wat van toepassing is. We bouwen de campagnes per dienst aan.</div>
+      <div class="quiz-multi-hint">Meerdere antwoorden mogelijk</div>
+      <div class="quiz-options multi-select">
+        <div class="qopt" data-q="1b" data-val="verkoop" onclick="selectMulti(this, '1b')">
+          <div class="qopt-icon">🔑</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Verkoopmakelaar</div>
+            <div class="qopt-sub">Woningverkopers bereiken die een makelaar zoeken</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="1b" data-val="aankoop" onclick="selectMulti(this, '1b')">
+          <div class="qopt-icon">🛒</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Aankoopmakelaar</div>
+            <div class="qopt-sub">Kopers bereiken die begeleiding zoeken bij hun aankoop</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="1b" data-val="taxatie" onclick="selectMulti(this, '1b')">
+          <div class="qopt-icon">📊</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Taxatie</div>
+            <div class="qopt-sub">Huiseigenaren die een waardebepaling of taxatie nodig hebben</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="1b" data-val="verhuur" onclick="selectMulti(this, '1b')">
+          <div class="qopt-icon">🏘️</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Verhuur</div>
+            <div class="qopt-sub">Verhuurders of huurders bereiken in jouw regio</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+      </div>
+      <div class="quiz-nav">
+        <button class="qbtn-back" onclick="prevStep('1b')">← Vorige</button>
+        <button class="qbtn-next" id="next1b" disabled onclick="nextStep('1b')">Volgende →</button>
+      </div>
+    </div>
+
+    <!-- Q2: Kantoorgrootte -->
+    <div class="quiz-card" id="q2">
+      <div class="quiz-q">Hoe groot is jouw makelaarskantoor?</div>
+      <div class="quiz-qsub">Dit helpt ons de schaal en het type campagne te bepalen dat het beste bij je past.</div>
+      <div class="quiz-options">
+        <div class="qopt" data-q="2" data-val="solo" onclick="selectOpt(this)">
+          <div class="qopt-icon">👤</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Ik werk alleen (ZZP)</div>
+            <div class="qopt-sub">Zelfstandig makelaar</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="2" data-val="klein" onclick="selectOpt(this)">
+          <div class="qopt-icon">👥</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">2 – 5 medewerkers</div>
+            <div class="qopt-sub">Klein kantoor</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="2" data-val="middel" onclick="selectOpt(this)">
+          <div class="qopt-icon">🏢</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">6 – 15 medewerkers</div>
+            <div class="qopt-sub">Groeiend kantoor</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="2" data-val="groot" onclick="selectOpt(this)">
+          <div class="qopt-icon">🏛️</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">15+ medewerkers</div>
+            <div class="qopt-sub">Gevestigd kantoor</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+      </div>
+      <div class="quiz-nav">
+        <button class="qbtn-back" onclick="prevStep(2)">← Vorige</button>
+        <button class="qbtn-next" id="next2" disabled onclick="nextStep(2)">Volgende →</button>
+      </div>
+    </div>
+
+    <!-- Q3: Werkgebied -->
+    <div class="quiz-card" id="q3">
+      <div class="quiz-q">Hoe groot is jouw werkgebied?</div>
+      <div class="quiz-qsub">Dit bepaalt de targeting-radius en het benodigde advertentiebudget.</div>
+      <div class="quiz-options">
+        <div class="qopt" data-q="3" data-val="wijk" onclick="selectOpt(this)">
+          <div class="qopt-icon">📍</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Één wijk of kern</div>
+            <div class="qopt-sub">Zeer lokaal, straal ~5 km</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="3" data-val="gemeente" onclick="selectOpt(this)">
+          <div class="qopt-icon">🗺️</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Één gemeente</div>
+            <div class="qopt-sub">Straal ~15 km rondom kantoor</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="3" data-val="regio" onclick="selectOpt(this)">
+          <div class="qopt-icon">🧭</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Meerdere gemeenten</div>
+            <div class="qopt-sub">Regio, straal ~30 km</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="3" data-val="provincie" onclick="selectOpt(this)">
+          <div class="qopt-icon">🌍</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Provincie of breder</div>
+            <div class="qopt-sub">Grootschalig werkgebied</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+      </div>
+      <div class="quiz-nav">
+        <button class="qbtn-back" onclick="prevStep(3)">← Vorige</button>
+        <button class="qbtn-next" id="next3" disabled onclick="nextStep(3)">Volgende →</button>
+      </div>
+    </div>
+
+    <!-- Q4: Huidige opdrachten -->
+    <div class="quiz-card" id="q4">
+      <div class="quiz-q">Hoeveel verkoopopdrachten haal je gemiddeld per maand binnen?</div>
+      <div class="quiz-qsub">Eerlijk antwoord geeft het meest relevante advies — dit gaat over jouw huidige situatie, niet wat je wil bereiken.</div>
+      <div class="quiz-options">
+        <div class="qopt" data-q="4" data-val="laag" onclick="selectOpt(this)">
+          <div class="qopt-icon">🌱</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">0 – 2 opdrachten</div>
+            <div class="qopt-sub">Ik wil echt groeien</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="4" data-val="middel" onclick="selectOpt(this)">
+          <div class="qopt-icon">📈</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">3 – 5 opdrachten</div>
+            <div class="qopt-sub">Solide basis, klaar voor meer</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="4" data-val="hoog" onclick="selectOpt(this)">
+          <div class="qopt-icon">🏆</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">6 – 10 opdrachten</div>
+            <div class="qopt-sub">Goed lopend, schaalbaar</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="4" data-val="top" onclick="selectOpt(this)">
+          <div class="qopt-icon">⚡</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">10+ opdrachten</div>
+            <div class="qopt-sub">Druk kantoor, wil structureel opschalen</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+      </div>
+      <div class="quiz-nav">
+        <button class="qbtn-back" onclick="prevStep(4)">← Vorige</button>
+        <button class="qbtn-next" id="next4" disabled onclick="nextStep(4)">Volgende →</button>
+      </div>
+    </div>
+
+    <!-- Q5: Budget -->
+    <div class="quiz-card" id="q5">
+      <div class="quiz-q">Wat is jouw advertentiebudget per maand?</div>
+      <div class="quiz-qsub">Dit is het budget dat direct naar Meta gaat — los van de beheerskosten van Real Adstate. Geen goed of fout antwoord.</div>
+      <div class="quiz-options">
+        <div class="qopt" data-q="5" data-val="geen" onclick="selectOpt(this)">
+          <div class="qopt-icon">🤔</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">Nog niet bepaald</div>
+            <div class="qopt-sub">Ik wil eerst weten wat werkt</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="5" data-val="klein" onclick="selectOpt(this)">
+          <div class="qopt-icon">💶</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">€150 – €300 / mnd</div>
+            <div class="qopt-sub">Bewust starten, resultaten meten</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="5" data-val="middel" onclick="selectOpt(this)">
+          <div class="qopt-icon">💰</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">€300 – €600 / mnd</div>
+            <div class="qopt-sub">Serieus investeren in groei</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+        <div class="qopt" data-q="5" data-val="groot" onclick="selectOpt(this)">
+          <div class="qopt-icon">🚀</div>
+          <div class="qopt-txt">
+            <div class="qopt-main">€600+ / mnd</div>
+            <div class="qopt-sub">Maximale zichtbaarheid in mijn regio</div>
+          </div>
+          <div class="qopt-check"></div>
+        </div>
+      </div>
+      <div class="quiz-nav">
+        <button class="qbtn-back" onclick="prevStep(5)">← Vorige</button>
+        <button class="qbtn-next" id="next5" disabled onclick="showResult()">Bekijk mijn advies →</button>
+      </div>
+    </div>
+
+    <!-- RESULTAAT -->
+    <div class="quiz-result" id="quizResult">
+      <div class="result-header">
+        <div class="result-match">✦ Jouw persoonlijk advies</div>
+        <div class="result-title" id="resultTitle">Jij bent klaar voor gerichte groei.</div>
+        <div class="result-sub" id="resultSub"></div>
+      </div>
+
+      <div class="result-grid">
+        <!-- Aanbevolen pakket -->
+        <div class="res-card featured">
+          <div class="res-card-tag">Aanbevolen pakket</div>
+          <div class="res-card-title" id="resPackNaam"></div>
+          <div class="res-card-val" id="resPackPrijs"></div>
+          <div class="res-card-sub" id="resPackSub"></div>
+        </div>
+        <!-- Campagnetype -->
+        <div class="res-card">
+          <div class="res-card-tag">Campagnetype</div>
+          <div class="res-card-title" id="resCampType"></div>
+          <div class="res-card-val" id="resCampIcon" style="font-size:1.8rem;"></div>
+          <div class="res-card-sub" id="resCampSub"></div>
+        </div>
+        <!-- Budget advies -->
+        <div class="res-card">
+          <div class="res-card-tag">Geschat advertentiebudget</div>
+          <div class="res-card-title">Meta budget advies</div>
+          <div class="res-card-val" id="resBudget"></div>
+          <div class="res-card-sub" id="resBudgetSub"></div>
+        </div>
+      </div>
+
+      <!-- Ruben contact -->
+      <div class="result-ruben">
+        <img class="rr-av" src="https://realadstate.nl/wp-content/uploads/2025/09/ruben-200x200.jpg" onerror="this.style.background='var(--green)';this.style.minWidth='56px'" alt="Ruben">
+        <div class="rr-txt">
+          <div class="rr-name">Ruben — Advertentiespecialist</div>
+          <div class="rr-sub" id="rubenMsg">Op basis van jouw antwoorden kan ik je een concreet voorstel sturen. Geen verplichtingen — gewoon een helder overzicht van wat ik voor jouw kantoor kan doen.</div>
+        </div>
+        <div class="rr-actions">
+          <a href="/cdn-cgi/l/email-protection#077572656269477562666b6663747366736229696b" class="rr-btn-primary">Stuur mij het voorstel →</a>
+          <a href="tel:+31" class="rr-btn-secondary">Bel direct</a>
+        </div>
+      </div>
+
+      <div class="result-restart">
+        <button class="restart-btn" onclick="restartQuiz()">↩ Opnieuw beginnen</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
+// ─── STATE ───────────────────────────────────────────────
+const answers = {};         // single-select answers: { '2': 'solo', '3': 'gemeente', ... }
+const multiAnswers = {};    // multi-select answers:  { '1': ['opdrachten','naamsbekendheid'], '1b': ['verkoop','taxatie'] }
+
+const stepOrder = ['1', '1b', '2', '3', '4', '5'];
+const stepLabels = {
+  '1':  'Jouw doelen',
+  '1b': 'Te promoten diensten',
+  '2':  'Kantoorgrootte',
+  '3':  'Werkgebied',
+  '4':  'Huidige situatie',
+  '5':  'Budget'
+};
+
+// ─── MULTI-SELECT (Q1, Q1b) ──────────────────────────────
+function selectMulti(el, qKey) {
+  if (!multiAnswers[qKey]) multiAnswers[qKey] = [];
+
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    el.querySelector('.qopt-check').textContent = '';
+    multiAnswers[qKey] = multiAnswers[qKey].filter(v => v !== el.dataset.val);
+  } else {
+    el.classList.add('selected');
+    el.querySelector('.qopt-check').textContent = '✓';
+    multiAnswers[qKey].push(el.dataset.val);
+  }
+
+  const nextBtn = document.getElementById('next' + qKey);
+  nextBtn.disabled = multiAnswers[qKey].length === 0;
+
+  // Show progress on first interaction with Q1
+  if (qKey === '1') {
+    document.getElementById('quizProgress').style.display = 'block';
+    updateProgress('1');
+  }
+}
+
+// ─── SINGLE-SELECT (Q2–Q5) ───────────────────────────────
+function selectOpt(el) {
+  const q = el.dataset.q;
+  document.querySelectorAll(`.qopt[data-q="${q}"]`).forEach(o => {
+    o.classList.remove('selected');
+    o.querySelector('.qopt-check').textContent = '';
+  });
+  el.classList.add('selected');
+  el.querySelector('.qopt-check').textContent = '✓';
+  answers[q] = el.dataset.val;
+  document.getElementById('next' + q).disabled = false;
+}
+
+// ─── NAVIGATION ──────────────────────────────────────────
+function nextStep(current) {
+  document.getElementById('q' + current).classList.remove('active');
+  const idx = stepOrder.indexOf(String(current));
+  const nextKey = stepOrder[idx + 1];
+  const nextEl = document.getElementById('q' + nextKey);
+  nextEl.classList.add('active');
+  updateProgress(nextKey);
+  setTimeout(() => nextEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+function prevStep(current) {
+  document.getElementById('q' + current).classList.remove('active');
+  const idx = stepOrder.indexOf(String(current));
+  const prevKey = stepOrder[idx - 1];
+  document.getElementById('q' + prevKey).classList.add('active');
+  updateProgress(prevKey);
+}
+
+function updateProgress(stepKey) {
+  const prog = document.getElementById('quizProgress');
+  prog.style.display = 'block';
+  const idx = stepOrder.indexOf(String(stepKey));
+  const num = idx + 1;
+  document.getElementById('qpStep').textContent = `Stap ${num} van 6`;
+  document.getElementById('qpLabel').textContent = stepLabels[stepKey] || '';
+  document.getElementById('qpFill').style.width = (num / 6 * 100) + '%';
+}
+
+// ─── SCORING LOGIC ───────────────────────────────────────
+function calcResult() {
+  const doelen   = multiAnswers['1']  || [];   // array: opdrachten|naamsbekendheid|leads|uitbreiden
+  const diensten = multiAnswers['1b'] || [];   // array: verkoop|aankoop|taxatie|verhuur
+  const grootte  = answers['2'];               // solo|klein|middel|groot
+  const gebied   = answers['3'];               // wijk|gemeente|regio|provincie
+  const ops      = answers['4'];               // laag|middel|hoog|top
+  const budget   = answers['5'];               // geen|klein|middel|groot
+
+  // ── Pakket score ──
+  let score = 0;
+  if (grootte === 'middel' || grootte === 'groot') score += 2;
+  if (grootte === 'klein') score += 1;
+  if (budget === 'middel') score += 1;
+  if (budget === 'groot') score += 2;
+  if (doelen.length >= 3 || diensten.length >= 3) score += 2;
+  else if (doelen.length >= 2 || diensten.length >= 2) score += 1;
+  if (ops === 'hoog' || ops === 'top') score += 1;
+  if (gebied === 'regio' || gebied === 'provincie') score += 1;
+
+  let pakket = score >= 5 ? 'Premium' : score >= 3 ? 'Groei' : 'Starter';
+
+  // ── Campagnetype (primair op diensten, dan doelen) ──
+  let campType, campIcon, campSub;
+  if (diensten.length >= 3) {
+    campType = 'Gecombineerde multi-dienst campagne';
+    campIcon = '🚀';
+    campSub  = `Meerdere diensten (${diensten.join(', ')}) gecombineerd in één funnel — sterk voor naamsbekendheid én leadgeneratie.`;
+  } else if (diensten.includes('verkoop') && diensten.includes('aankoop')) {
+    campType = 'Volledig makelaarskantoor campagne';
+    campIcon = '🔑';
+    campSub  = 'Zowel kopers als verkopers bereiken. Ideaal voor kantoren die beide markten bedienen.';
+  } else if (diensten.includes('verkoop')) {
+    campType = 'Verkoopopdrachten campagne';
+    campIcon = '🏡';
+    campSub  = 'Gericht op huiseigenaren die overwegen te verkopen — vóórdat ze een makelaar bellen.';
+  } else if (diensten.includes('aankoop')) {
+    campType = 'Aankoopmakelaar campagne';
+    campIcon = '🛒';
+    campSub  = 'Gericht op kopers die hulp zoeken bij hun zoektocht naar een woning.';
+  } else if (diensten.includes('taxatie')) {
+    campType = 'Taxatie leadcampagne';
+    campIcon = '📊';
+    campSub  = 'Gratis waardebepaling als haak — laagdrempelig voor eigenaren, hoogwaardig voor jou.';
+  } else if (diensten.includes('verhuur')) {
+    campType = 'Verhuur campagne';
+    campIcon = '🏘️';
+    campSub  = 'Verhuurders en huurders bereiken in jouw regio.';
+  } else if (doelen.includes('naamsbekendheid')) {
+    campType = 'Regionale naamsbekendheid';
+    campIcon = '📣';
+    campSub  = 'Consistente zichtbaarheid als dé makelaar van jouw regio.';
+  } else {
+    campType = 'Verkoopopdrachten campagne';
+    campIcon = '🏡';
+    campSub  = 'Gericht op huiseigenaren die overwegen te verkopen.';
+  }
+
+  // ── Budget advies ──
+  let budgetAdvies, budgetSub;
+  if (budget === 'groot' || gebied === 'provincie') {
+    budgetAdvies = '€450–700/mnd'; budgetSub = 'Breed werkgebied. Maximale zichtbaarheid, meerdere campagnetypen actief.';
+  } else if (budget === 'middel' || gebied === 'regio') {
+    budgetAdvies = '€250–450/mnd'; budgetSub = 'Meerdere gemeenten. Voldoende bereik voor merkbare leadgeneratie.';
+  } else if (budget === 'geen') {
+    budgetAdvies = '€150–200/mnd'; budgetSub = 'Bewust startbudget. We meten resultaten en schalen op als het werkt.';
+  } else {
+    budgetAdvies = '€150–250/mnd'; budgetSub = 'Lokale campagne, één gemeente. Goede start om resultaten te meten.';
+  }
+
+  // ── Resultaat titel ──
+  const hasVerkoop = diensten.includes('verkoop') || doelen.includes('opdrachten');
+  const multiDienst = diensten.length >= 2;
+  let title = 'Jij bent klaar om structureel meer opdrachten te genereren.';
+  if (multiDienst) title = 'Jij wil breed groeien — en dat kan.';
+  else if (diensten.includes('aankoop')) title = 'Aankoopbegeleiding is een groeimarkt. Wij brengen je in beeld.';
+  else if (diensten.includes('taxatie')) title = 'Taxaties als instap. Slim — en bewezen effectief.';
+  else if (doelen.includes('naamsbekendheid')) title = 'Jij bouwt aan een merk. Wij maken je zichtbaar.';
+  else if (doelen.includes('uitbreiden')) title = 'Nieuwe regio, nieuwe kansen. Wij zorgen voor snelle zichtbaarheid.';
+
+  // ── Sub tekst ──
+  const dienstNamen = {verkoop:'verkoopmakelaar', aankoop:'aankoopmakelaar', taxatie:'taxaties', verhuur:'verhuur'};
+  const dienstStr = diensten.map(d => dienstNamen[d] || d).join(', ');
+  const sub = `Op basis van jouw keuzes (${dienstStr || 'jouw doelen'}) adviseren wij het ${pakket}-pakket met een ${campType.toLowerCase()}. We stemmen targeting en copy volledig af op jouw werkgebied en doelgroep.`;
+
+  // ── Pakket details ──
+  const pakketten = {
+    Starter: { prijs: '€299/mnd', sub: 'Ideaal voor solo makelaar of eerste campagne. 1 campagnetype, maandelijkse rapportage.' },
+    Groei:   { prijs: '€399/mnd', sub: 'Combineer 2 campagnetypen met A/B testing en retargeting. Sterkste groei-accelerator.' },
+    Premium: { prijs: '€499/mnd', sub: 'Alle campagnetypen, UGC video ads en wekelijkse rapportage. Voor serieuze groeistrategie.' }
+  };
+
+  return { pakket, pakketPrijs: pakketten[pakket].prijs, pakketSub: pakketten[pakket].sub,
+           campType, campIcon, campSub, budgetAdvies, budgetSub, title, sub, diensten };
+}
+
+// ─── SHOW RESULT ─────────────────────────────────────────
+function showResult() {
+  document.getElementById('q5').classList.remove('active');
+  document.getElementById('qpStep').textContent = 'Jouw advies';
+  document.getElementById('qpLabel').textContent = 'Op basis van 6 antwoorden';
+  document.getElementById('qpFill').style.width = '100%';
+
+  const r = calcResult();
+
+  document.getElementById('resultTitle').textContent   = r.title;
+  document.getElementById('resultSub').textContent     = r.sub;
+  document.getElementById('resPackNaam').textContent   = r.pakket;
+  document.getElementById('resPackPrijs').textContent  = r.pakketPrijs;
+  document.getElementById('resPackSub').textContent    = r.pakketSub;
+  document.getElementById('resCampType').textContent   = r.campType;
+  document.getElementById('resCampIcon').textContent   = r.campIcon;
+  document.getElementById('resCampSub').textContent    = r.campSub;
+  document.getElementById('resBudget').textContent     = r.budgetAdvies;
+  document.getElementById('resBudgetSub').textContent  = r.budgetSub;
+
+  const dienstNamen = {verkoop:'verkoopmakelaar', aankoop:'aankoopmakelaar', taxatie:'taxaties', verhuur:'verhuur'};
+  const dienstStr = r.diensten.map(d => dienstNamen[d] || d).join(' + ') || 'jouw diensten';
+  document.getElementById('rubenMsg').textContent =
+    `Ik zie dat je ${dienstStr} wil promoten met het ${r.pakket}-pakket. Ik stuur je een concreet voorstel op maat — geen verplichtingen, gewoon een helder overzicht van wat ik voor jouw kantoor kan doen.`;
+
+  document.getElementById('quizResult').classList.add('active');
+  document.getElementById('quizResult').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+// ─── RESTART ─────────────────────────────────────────────
+function restartQuiz() {
+  Object.keys(answers).forEach(k => delete answers[k]);
+  Object.keys(multiAnswers).forEach(k => delete multiAnswers[k]);
+
+  document.querySelectorAll('.qopt').forEach(o => {
+    o.classList.remove('selected');
+    o.querySelector('.qopt-check').textContent = '';
+  });
+  for (const key of stepOrder) {
+    const btn = document.getElementById('next' + key);
+    if (btn) btn.disabled = true;
+  }
+  document.getElementById('quizResult').classList.remove('active');
+  document.getElementById('quizProgress').style.display = 'none';
+  document.getElementById('q
+
+<script>
+
+</script>
