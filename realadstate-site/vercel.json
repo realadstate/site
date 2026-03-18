@@ -1,25 +1,10 @@
-
-Copy
-
 {
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    {
-      "source": "/makelaars/diensten",
-      "destination": "/pages/makelaardiensten.html"
-    },
-    {
-      "source": "/vastgoedontwikkelaars",
-      "destination": "/pages/vastgoedontwikkelaars.html"
-    },
-    {
-      "source": "/cases",
-      "destination": "/pages/cases.html"
-    },
-    {
-      "source": "/cases/:slug",
-      "destination": "/pages/case-template.html"
-    }
+    { "source": "/makelaars/diensten",    "destination": "/pages/makelaardiensten.html" },
+    { "source": "/vastgoedontwikkelaars", "destination": "/pages/vastgoedontwikkelaars.html" },
+    { "source": "/cases",                 "destination": "/pages/cases.html" },
+    { "source": "/cases/:slug",           "destination": "/pages/case-template.html" }
   ]
 }
